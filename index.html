@@ -1,0 +1,3982 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <meta name="theme-color" content="#1d4ed8">
+  <title>Productivity Hub ⚡ Michie JKT48 Edition</title>
+
+  <!-- Konfigurasi PWA (Progressive Web App) -->
+  <link rel="manifest" href="data:application/manifest+json;utf-8,%7B%22name%22%3A%22Productivity%20Hub%22%2C%22short_name%22%3A%22ProdHub%22%2C%22start_url%22%3A%22.%22%2C%22display%22%3A%22standalone%22%2C%22background_color%22%3A%22%23f8fafc%22%2C%22theme_color%22%3A%22%230f766e%22%7D">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="ProductivityHub">
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Outfit:wght@600;700;800;900&display=swap" rel="stylesheet">
+
+  <style>
+    /* CSS Reset & Cool Blue "Boy/Street" Variables */
+    *, *::before, *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    :root {
+      /* Dynamic Theme Variables configurable by Admin */
+      --primary-dark: #1e3a8a;
+      --primary: #2563eb;
+      --primary-accent: #0ea5e9;
+      --primary-light: #dbeafe;
+      --primary-soft: #eff6ff;
+      --accent-cyan: #38bdf8;
+      --accent-neon: #60a5fa;
+      --accent-gold: #f59e0b;
+      --header-grad-1: #0f172a;
+      --header-grad-2: #1e3a8a;
+      --header-grad-3: #2563eb;
+      --bg-outside-gradient: linear-gradient(135deg, #cbd5e1 0%, #94a3b8 50%, #64748b 100%);
+      --overlay-blur: 8px;
+      --overlay-opacity: 0.15;
+      --priority-high: #ef4444;
+      --priority-high-bg: #fee2e2;
+      --priority-med: #f59e0b;
+      --priority-med-bg: #fef3c7;
+      --priority-low: #10b981;
+      --priority-low-bg: #d1fae5;
+      --bg-outside: #cbd5e1;
+      --bg-app: #f8fafc;
+      --card-bg: #ffffff;
+      --text-main: #0f172a;
+      --text-muted: #475569;
+      --text-light: #94a3b8;
+      --border-color: #e2e8f0;
+      --border-focus: #3b82f6;
+      --shadow-sm: 0 1px 3px rgba(15, 23, 42, 0.06), 0 1px 2px rgba(15, 23, 42, 0.04);
+      --shadow-md: 0 6px 16px -2px rgba(37, 99, 235, 0.12), 0 3px 6px -3px rgba(15, 23, 42, 0.06);
+      --shadow-lg: 0 14px 30px -6px rgba(37, 99, 235, 0.22), 0 8px 12px -6px rgba(15, 23, 42, 0.08);
+      --radius-sm: 8px;
+      --radius-md: 14px;
+      --radius-lg: 20px;
+      --radius-full: 9999px;
+      --bottom-bar-height: 70px;
+    }
+
+    body {
+      font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      background: var(--bg-outside-gradient);
+      color: var(--text-main);
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: flex-start;
+      overflow-x: hidden;
+      line-height: 1.5;
+    }
+
+    /* Smartphone Frame Container */
+    .app-viewport {
+      width: 100%;
+      max-width: 420px;
+      min-height: 100vh;
+      background-color: var(--bg-app);
+      display: flex;
+      flex-direction: column;
+      position: relative;
+      box-shadow: 0 25px 50px -12px rgba(15, 23, 42, 0.35), 0 0 0 1px rgba(15, 23, 42, 0.1);
+      overflow-y: auto;
+      overflow-x: hidden;
+      scroll-behavior: smooth;
+    }
+
+    @media (max-width: 440px) {
+      .app-viewport {
+        max-width: 100%;
+        box-shadow: none;
+      }
+    }
+
+    /* Top App Header */
+    .app-header {
+      background: linear-gradient(135deg, var(--header-grad-1) 0%, var(--header-grad-2) 50%, var(--header-grad-3) 100%);
+      color: white;
+      padding: 20px 18px 18px;
+      border-bottom-left-radius: var(--radius-lg);
+      border-bottom-right-radius: var(--radius-lg);
+      position: sticky;
+      top: 0;
+      z-index: 40;
+      box-shadow: 0 8px 24px rgba(30, 58, 138, 0.35);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .app-header::after {
+      content: '⚡';
+      position: absolute;
+      bottom: -6px;
+      right: 12px;
+      font-size: 2.4rem;
+      opacity: 0.12;
+    }
+
+    .header-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 12px;
+      position: relative;
+      z-index: 2;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .brand-avatar-img {
+      width: 42px;
+      height: 42px;
+      border-radius: var(--radius-md);
+      object-fit: cover;
+      object-position: top center;
+      border: 2px solid #60a5fa;
+      box-shadow: 0 0 12px rgba(96, 165, 250, 0.5);
+    }
+
+    .brand-text h1 {
+      font-family: 'Outfit', 'Plus Jakarta Sans', sans-serif;
+      font-size: 1.15rem;
+      font-weight: 800;
+      letter-spacing: -0.01em;
+      line-height: 1.2;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .brand-text p {
+      font-size: 0.72rem;
+      color: #93c5fd;
+      font-weight: 600;
+      letter-spacing: 0.02em;
+    }
+
+    /* User Profile Header Trigger */
+    .header-user-badge {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      background: rgba(255, 255, 255, 0.15);
+      backdrop-filter: blur(8px);
+      padding: 5px 12px 5px 6px;
+      border-radius: var(--radius-full);
+      border: 1.5px solid rgba(255, 255, 255, 0.25);
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .header-user-badge:hover, .header-user-badge:active {
+      background: rgba(255, 255, 255, 0.25);
+      transform: scale(0.98);
+    }
+
+    .header-user-badge.is-admin {
+      background: linear-gradient(135deg, rgba(245, 158, 11, 0.3) 0%, rgba(217, 119, 6, 0.3) 100%);
+      border-color: #f59e0b;
+      box-shadow: 0 0 10px rgba(245, 158, 11, 0.4);
+    }
+
+    .user-avatar {
+      width: 26px;
+      height: 26px;
+      border-radius: 50%;
+      background: #3b82f6;
+      color: #ffffff;
+      font-size: 0.75rem;
+      font-weight: 800;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+    }
+
+    .header-user-badge.is-admin .user-avatar {
+      background: #f59e0b;
+      color: #ffffff;
+    }
+
+    .user-name-text {
+      font-size: 0.76rem;
+      font-weight: 700;
+      color: #ffffff;
+      max-width: 90px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    /* Header Mini Stats Banner */
+    .header-stat-bar {
+      display: flex;
+      background: rgba(15, 23, 42, 0.45);
+      border-radius: var(--radius-md);
+      padding: 8px 14px;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 0.75rem;
+      border: 1px solid rgba(255, 255, 255, 0.12);
+    }
+
+    .stat-item {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .stat-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background-color: #38bdf8;
+      box-shadow: 0 0 8px #38bdf8;
+    }
+
+    /* Global Broadcast Banner (Set by Admin) */
+    .admin-broadcast-banner {
+      background: linear-gradient(135deg, #1e3a8a 0%, #1e40af 100%);
+      color: #ffffff;
+      padding: 8px 14px;
+      font-size: 0.75rem;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+      border-bottom: 1px solid #3b82f6;
+    }
+
+    /* Main Container & Screens */
+    .app-content {
+      flex: 1;
+      padding: 16px 16px calc(var(--bottom-bar-height) + 24px);
+      display: flex;
+      flex-direction: column;
+    }
+
+    .tab-screen {
+      display: none;
+      opacity: 0;
+      transform: translateY(8px);
+      transition: opacity 0.25s ease, transform 0.25s ease;
+      animation: fadeIn 0.25s forwards;
+    }
+
+    .tab-screen.active {
+      display: block;
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(8px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .badge {
+      font-size: 0.68rem;
+      padding: 3px 10px;
+      border-radius: var(--radius-full);
+      font-weight: 700;
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    .badge-blue { background: var(--primary-light); color: var(--primary-dark); }
+    .badge-gold { background: #fef3c7; color: #b45309; }
+    .badge-high { background: var(--priority-high-bg); color: var(--priority-high); }
+    .badge-med { background: var(--priority-med-bg); color: #b45309; }
+    .badge-low { background: var(--priority-low-bg); color: #047857; }
+
+    /* Michie Hero Banner Card */
+    .michie-banner-card {
+      background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);
+      border: 1.5px solid #334155;
+      border-radius: var(--radius-lg);
+      padding: 12px 14px;
+      margin-bottom: 16px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      box-shadow: var(--shadow-sm);
+    }
+
+    .michie-banner-photo {
+      width: 56px;
+      height: 56px;
+      border-radius: var(--radius-md);
+      object-fit: cover;
+      object-position: center top;
+      border: 2px solid #38bdf8;
+      box-shadow: 0 0 10px rgba(56, 189, 248, 0.4);
+      flex-shrink: 0;
+    }
+
+    .michie-banner-content h4 {
+      font-family: 'Outfit', sans-serif;
+      font-size: 0.88rem;
+      font-weight: 800;
+      color: #38bdf8;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    .michie-banner-content p {
+      font-size: 0.74rem;
+      color: #cbd5e1;
+      line-height: 1.35;
+      margin-top: 2px;
+    }
+
+    /* ==========================================================================
+       TAB 1: TUGAS
+       ========================================================================== */
+    .task-progress-card {
+      background: linear-gradient(135deg, #1e3a8a 0%, #2563eb 50%, #0284c7 100%);
+      color: white;
+      border-radius: var(--radius-lg);
+      padding: 16px;
+      margin-bottom: 16px;
+      box-shadow: var(--shadow-lg);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .progress-info h3 {
+      font-family: 'Outfit', 'Plus Jakarta Sans', sans-serif;
+      font-size: 1rem;
+      font-weight: 800;
+      margin-bottom: 3px;
+    }
+
+    .progress-info p {
+      font-size: 0.74rem;
+      color: #bfdbfe;
+      font-weight: 500;
+    }
+
+    .progress-bar-container {
+      width: 100%;
+      height: 8px;
+      background: rgba(255, 255, 255, 0.25);
+      border-radius: var(--radius-full);
+      margin-top: 8px;
+      overflow: hidden;
+    }
+
+    .progress-bar-fill {
+      height: 100%;
+      width: 0%;
+      background: #38bdf8;
+      border-radius: var(--radius-full);
+      transition: width 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+      box-shadow: 0 0 10px #38bdf8;
+    }
+
+    .progress-circle-wrap {
+      min-width: 52px;
+      height: 52px;
+      background: rgba(255, 255, 255, 0.18);
+      backdrop-filter: blur(6px);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 800;
+      font-size: 0.85rem;
+      border: 2px solid rgba(255, 255, 255, 0.4);
+    }
+
+    .fast-input-card {
+      background: var(--card-bg);
+      border-radius: var(--radius-lg);
+      padding: 16px;
+      box-shadow: var(--shadow-sm);
+      border: 1.5px solid var(--border-color);
+      margin-bottom: 16px;
+    }
+
+    .input-field {
+      width: 100%;
+      padding: 11px 14px;
+      border: 1.5px solid var(--border-color);
+      border-radius: var(--radius-md);
+      font-family: inherit;
+      font-size: 0.88rem;
+      outline: none;
+      transition: border-color 0.2s, box-shadow 0.2s;
+      background: #f8fafc;
+    }
+
+    .input-field:focus {
+      border-color: var(--primary);
+      box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.15);
+      background: #ffffff;
+    }
+
+    .form-row-label {
+      font-size: 0.74rem;
+      font-weight: 700;
+      color: var(--text-muted);
+      margin-top: 12px;
+      margin-bottom: 6px;
+      display: flex;
+      align-items: center;
+      gap: 5px;
+    }
+
+    .priority-pills {
+      display: flex;
+      gap: 8px;
+      margin-bottom: 12px;
+    }
+
+    .priority-pill-btn {
+      flex: 1;
+      padding: 8px 6px;
+      border-radius: var(--radius-full);
+      font-size: 0.75rem;
+      font-weight: 700;
+      border: 1.5px solid transparent;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 5px;
+      transition: all 0.2s ease;
+      background: #f1f5f9;
+      color: var(--text-muted);
+    }
+
+    .priority-pill-btn .pill-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+    }
+
+    .priority-pill-btn[data-priority="high"] .pill-dot { background: var(--priority-high); }
+    .priority-pill-btn[data-priority="high"].active {
+      background: var(--priority-high-bg);
+      border-color: var(--priority-high);
+      color: var(--priority-high);
+      box-shadow: 0 2px 8px rgba(239, 68, 68, 0.2);
+    }
+
+    .priority-pill-btn[data-priority="med"] .pill-dot { background: var(--priority-med); }
+    .priority-pill-btn[data-priority="med"].active {
+      background: var(--priority-med-bg);
+      border-color: var(--priority-med);
+      color: #b45309;
+      box-shadow: 0 2px 8px rgba(245, 158, 11, 0.2);
+    }
+
+    .priority-pill-btn[data-priority="low"] .pill-dot { background: var(--priority-low); }
+    .priority-pill-btn[data-priority="low"].active {
+      background: var(--priority-low-bg);
+      border-color: var(--priority-low);
+      color: #047857;
+      box-shadow: 0 2px 8px rgba(16, 185, 129, 0.2);
+    }
+
+    .deadline-row {
+      display: flex;
+      gap: 8px;
+      align-items: center;
+      margin-bottom: 14px;
+    }
+
+    .deadline-input {
+      flex: 1;
+      padding: 9px 12px;
+      border: 1.5px solid var(--border-color);
+      border-radius: var(--radius-md);
+      font-family: inherit;
+      font-size: 0.78rem;
+      color: var(--text-main);
+      outline: none;
+      background: #f8fafc;
+    }
+
+    .deadline-input:focus {
+      border-color: var(--primary);
+    }
+
+    .btn-submit-task {
+      width: 100%;
+      background: linear-gradient(135deg, var(--primary-dark) 0%, var(--primary) 100%);
+      color: white;
+      border: none;
+      border-radius: var(--radius-md);
+      padding: 12px;
+      font-size: 0.88rem;
+      font-weight: 800;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      transition: all 0.2s;
+      box-shadow: 0 6px 16px rgba(37, 99, 235, 0.3);
+    }
+
+    .btn-submit-task:active {
+      transform: scale(0.98);
+      background: #1d4ed8;
+    }
+
+    .filter-tabs {
+      display: flex;
+      background: #e2e8f0;
+      padding: 4px;
+      border-radius: var(--radius-md);
+      margin-bottom: 14px;
+      gap: 4px;
+    }
+
+    .filter-tab-btn {
+      flex: 1;
+      text-align: center;
+      padding: 7px 0;
+      border-radius: var(--radius-sm);
+      font-size: 0.76rem;
+      font-weight: 700;
+      color: var(--text-muted);
+      border: none;
+      background: transparent;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .filter-tab-btn.active {
+      background: #ffffff;
+      color: var(--primary);
+      box-shadow: var(--shadow-sm);
+    }
+
+    .task-list {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .task-touch-card {
+      background: var(--card-bg);
+      border: 1.5px solid var(--border-color);
+      border-radius: var(--radius-lg);
+      padding: 13px 14px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      box-shadow: var(--shadow-sm);
+      transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+      animation: slideIn 0.2s ease-out;
+      user-select: none;
+    }
+
+    @keyframes slideIn {
+      from { opacity: 0; transform: translateY(6px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .task-touch-card.completed {
+      background: #f1f5f9;
+      border-color: #cbd5e1;
+      opacity: 0.6;
+    }
+
+    .task-touch-card.completed .task-title-text {
+      text-decoration: line-through;
+      color: var(--text-light);
+    }
+
+    .task-touch-card.completed .task-deadline-info {
+      color: var(--text-light) !important;
+    }
+
+    .task-card-left {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      flex: 1;
+      min-width: 0;
+      cursor: pointer;
+    }
+
+    .round-checkbox {
+      width: 26px;
+      height: 26px;
+      border-radius: 50%;
+      border: 2px solid #94a3b8;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      flex-shrink: 0;
+      transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+      background: #ffffff;
+    }
+
+    .round-checkbox svg {
+      display: none;
+      width: 14px;
+      height: 14px;
+      stroke: white;
+      stroke-width: 3;
+    }
+
+    .task-touch-card.completed .round-checkbox {
+      background: var(--primary);
+      border-color: var(--primary);
+      transform: scale(1.05);
+      box-shadow: 0 0 8px rgba(37, 99, 235, 0.4);
+    }
+
+    .task-touch-card.completed .round-checkbox svg {
+      display: block;
+    }
+
+    .task-content-center {
+      display: flex;
+      flex-direction: column;
+      min-width: 0;
+      gap: 3px;
+    }
+
+    .task-title-text {
+      font-size: 0.9rem;
+      font-weight: 700;
+      color: var(--text-main);
+      word-break: break-word;
+      line-height: 1.35;
+      transition: color 0.2s;
+    }
+
+    .task-meta-row {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      flex-wrap: wrap;
+      margin-top: 2px;
+    }
+
+    .task-deadline-info {
+      font-size: 0.7rem;
+      font-weight: 600;
+      color: var(--text-muted);
+      display: inline-flex;
+      align-items: center;
+      gap: 3px;
+    }
+
+    .task-deadline-info.overdue {
+      color: var(--priority-high);
+      font-weight: 800;
+    }
+
+    .btn-delete-task {
+      background: transparent;
+      border: none;
+      color: var(--text-light);
+      cursor: pointer;
+      padding: 8px;
+      border-radius: var(--radius-sm);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.2s;
+    }
+
+    .btn-delete-task:hover, .btn-delete-task:active {
+      color: var(--priority-high);
+      background: var(--priority-high-bg);
+    }
+
+    .btn-delete-task svg {
+      width: 18px;
+      height: 18px;
+    }
+
+    .empty-state {
+      text-align: center;
+      padding: 36px 16px;
+      color: var(--text-muted);
+    }
+
+    .empty-state svg {
+      width: 48px;
+      height: 48px;
+      stroke: var(--text-light);
+      margin-bottom: 8px;
+    }
+
+    .empty-state p {
+      font-size: 0.85rem;
+    }
+
+    .reminder-banner {
+      background: #eff6ff;
+      border: 1px solid #bfdbfe;
+      border-radius: var(--radius-md);
+      padding: 10px 14px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 14px;
+      font-size: 0.76rem;
+      color: #1e40af;
+    }
+
+    .btn-enable-notif {
+      background: var(--primary);
+      color: white;
+      border: none;
+      padding: 4px 12px;
+      border-radius: var(--radius-full);
+      font-size: 0.7rem;
+      font-weight: 700;
+      cursor: pointer;
+    }
+
+    /* ==========================================================================
+       TAB 2: FOKUS
+       ========================================================================== */
+    .focus-mode-selector {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 8px;
+      margin-bottom: 16px;
+    }
+
+    .focus-mode-card {
+      background: var(--card-bg);
+      border: 2px solid var(--border-color);
+      border-radius: var(--radius-md);
+      padding: 12px 8px;
+      text-align: center;
+      cursor: pointer;
+      transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 3px;
+    }
+
+    .focus-mode-card .mode-icon {
+      font-size: 1.3rem;
+    }
+
+    .focus-mode-card .mode-title {
+      font-size: 0.8rem;
+      font-weight: 700;
+      color: var(--text-main);
+    }
+
+    .focus-mode-card .mode-sub {
+      font-size: 0.68rem;
+      color: var(--text-muted);
+      font-weight: 500;
+    }
+
+    .focus-mode-card.active {
+      border-color: var(--primary);
+      background: var(--primary-soft);
+      box-shadow: 0 4px 14px rgba(37, 99, 235, 0.2);
+      transform: translateY(-2px);
+    }
+
+    .focus-mode-card.active .mode-title {
+      color: var(--primary);
+      font-weight: 800;
+    }
+
+    .timer-circle-card {
+      background: var(--card-bg);
+      border-radius: var(--radius-lg);
+      padding: 24px 16px 20px;
+      box-shadow: var(--shadow-md);
+      border: 1.5px solid var(--border-color);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 16px;
+      position: relative;
+    }
+
+    .timer-svg-container {
+      position: relative;
+      width: 230px;
+      height: 230px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .timer-svg {
+      transform: rotate(-90deg);
+      width: 100%;
+      height: 100%;
+    }
+
+    .timer-bg-circle {
+      fill: none;
+      stroke: #f1f5f9;
+      stroke-width: 12;
+    }
+
+    .timer-progress-circle {
+      fill: none;
+      stroke: url(#blueGradient);
+      stroke-width: 12;
+      stroke-linecap: round;
+      stroke-dasharray: 565.48;
+      stroke-dashoffset: 0;
+      transition: stroke-dashoffset 0.5s linear;
+    }
+
+    .timer-display {
+      position: absolute;
+      text-align: center;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    .timer-time {
+      font-family: 'Outfit', 'Plus Jakarta Sans', sans-serif;
+      font-size: 3.2rem;
+      font-weight: 800;
+      color: var(--text-main);
+      letter-spacing: -0.04em;
+      line-height: 1;
+      font-variant-numeric: tabular-nums;
+    }
+
+    .timer-label {
+      font-size: 0.76rem;
+      font-weight: 800;
+      color: var(--primary);
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      margin-top: 6px;
+    }
+
+    .timer-status-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      padding: 3px 12px;
+      border-radius: var(--radius-full);
+      font-size: 0.7rem;
+      font-weight: 700;
+      margin-top: 6px;
+      background: #f1f5f9;
+      color: var(--text-muted);
+    }
+
+    .timer-status-badge.running {
+      background: var(--primary-light);
+      color: var(--primary-dark);
+      box-shadow: 0 0 8px rgba(37, 99, 235, 0.25);
+    }
+
+    .timer-thumb-controls {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 12px;
+      width: 100%;
+      margin-top: 20px;
+      padding: 0 8px;
+    }
+
+    .btn-thumb-main {
+      flex: 2;
+      height: 54px;
+      border-radius: var(--radius-full);
+      background: linear-gradient(135deg, var(--primary-dark) 0%, var(--primary) 50%, #0284c7 100%);
+      color: white;
+      border: none;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      font-size: 0.95rem;
+      font-weight: 800;
+      box-shadow: 0 8px 22px rgba(37, 99, 235, 0.4);
+      cursor: pointer;
+      transition: transform 0.15s, box-shadow 0.15s, background 0.2s;
+    }
+
+    .btn-thumb-main:active {
+      transform: scale(0.97);
+    }
+
+    .btn-thumb-main.is-paused {
+      background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
+      box-shadow: 0 8px 20px rgba(245, 158, 11, 0.35);
+    }
+
+    .btn-thumb-main svg {
+      width: 22px;
+      height: 22px;
+      fill: currentColor;
+    }
+
+    .btn-thumb-secondary {
+      flex: 1;
+      height: 54px;
+      border-radius: var(--radius-full);
+      background: #f1f5f9;
+      color: var(--text-muted);
+      border: 1.5px solid var(--border-color);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      font-size: 0.82rem;
+      font-weight: 700;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .btn-thumb-secondary:hover, .btn-thumb-secondary:active {
+      background: #e2e8f0;
+      color: var(--text-main);
+    }
+
+    .btn-thumb-secondary svg {
+      width: 18px;
+      height: 18px;
+    }
+
+    .sound-card {
+      background: var(--card-bg);
+      border-radius: var(--radius-lg);
+      padding: 14px 16px;
+      box-shadow: var(--shadow-sm);
+      border: 1.5px solid var(--border-color);
+    }
+
+    .card-title {
+      font-family: 'Outfit', 'Plus Jakarta Sans', sans-serif;
+      font-size: 0.94rem;
+      font-weight: 700;
+      color: var(--text-main);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 12px;
+    }
+
+    .sound-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 8px;
+      margin-top: 8px;
+    }
+
+    .sound-btn {
+      background: #f8fafc;
+      border: 1.5px solid var(--border-color);
+      border-radius: var(--radius-md);
+      padding: 10px 6px;
+      font-size: 0.72rem;
+      font-weight: 600;
+      color: var(--text-main);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 6px;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .sound-btn.playing {
+      background: var(--primary-light);
+      border-color: var(--primary);
+      color: var(--primary-dark);
+      font-weight: 700;
+      box-shadow: 0 2px 8px rgba(37, 99, 235, 0.2);
+    }
+
+    .sound-btn svg {
+      width: 20px;
+      height: 20px;
+      stroke: currentColor;
+    }
+
+    /* ==========================================================================
+       TAB 3: JURNAL & REFLEKSI
+       ========================================================================== */
+    .mood-picker-box {
+      background: var(--card-bg);
+      border-radius: var(--radius-lg);
+      padding: 16px;
+      box-shadow: var(--shadow-sm);
+      border: 1.5px solid var(--border-color);
+      margin-bottom: 16px;
+    }
+
+    .mood-label {
+      font-family: 'Outfit', 'Plus Jakarta Sans', sans-serif;
+      font-size: 0.84rem;
+      font-weight: 700;
+      color: var(--text-muted);
+      margin-bottom: 8px;
+      display: block;
+    }
+
+    .mood-options {
+      display: flex;
+      justify-content: space-between;
+      gap: 6px;
+    }
+
+    .mood-btn {
+      flex: 1;
+      background: #f8fafc;
+      border: 1.5px solid var(--border-color);
+      border-radius: var(--radius-md);
+      padding: 8px 4px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 2px;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .mood-btn span.emoji { font-size: 1.3rem; }
+    .mood-btn span.text { font-size: 0.65rem; font-weight: 600; color: var(--text-muted); }
+
+    .mood-btn.active {
+      background: var(--primary-soft);
+      border-color: var(--primary);
+      transform: translateY(-2px);
+      box-shadow: 0 4px 10px rgba(37, 99, 235, 0.18);
+    }
+
+    .mood-btn.active span.text { color: var(--primary); font-weight: 800; }
+
+    .journal-form {
+      background: var(--card-bg);
+      border-radius: var(--radius-lg);
+      padding: 16px;
+      box-shadow: var(--shadow-sm);
+      border: 1.5px solid var(--border-color);
+      margin-bottom: 16px;
+    }
+
+    .journal-form-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 8px;
+      margin-bottom: 8px;
+    }
+
+    .journal-field-label {
+      font-size: 0.72rem;
+      font-weight: 700;
+      color: var(--text-muted);
+      margin-bottom: 4px;
+      display: block;
+    }
+
+    .journal-select {
+      width: 100%;
+      padding: 10px 12px;
+      border: 1.5px solid var(--border-color);
+      border-radius: var(--radius-md);
+      font-family: inherit;
+      font-size: 0.82rem;
+      font-weight: 600;
+      background: #f8fafc;
+      color: var(--text-main);
+      outline: none;
+      cursor: pointer;
+      transition: border-color 0.2s;
+    }
+
+    .journal-select:focus {
+      border-color: var(--primary);
+      background: #ffffff;
+    }
+
+    .journal-textarea {
+      width: 100%;
+      height: 95px;
+      padding: 10px 12px;
+      border: 1.5px solid var(--border-color);
+      border-radius: var(--radius-md);
+      font-family: inherit;
+      font-size: 0.86rem;
+      outline: none;
+      resize: none;
+      margin-top: 4px;
+      margin-bottom: 8px;
+      transition: border-color 0.2s;
+      background: #f8fafc;
+      line-height: 1.5;
+    }
+
+    .journal-textarea:focus {
+      border-color: var(--primary);
+      background: #ffffff;
+    }
+
+    .btn-save-journal {
+      width: 100%;
+      background: linear-gradient(135deg, var(--primary-dark) 0%, var(--primary) 100%);
+      color: white;
+      border: none;
+      border-radius: var(--radius-md);
+      padding: 12px;
+      font-size: 0.88rem;
+      font-weight: 800;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      margin-top: 10px;
+      box-shadow: 0 4px 14px rgba(37, 99, 235, 0.25);
+      transition: all 0.2s;
+    }
+
+    .btn-save-journal:hover {
+      background: #1d4ed8;
+      transform: translateY(-1px);
+    }
+
+    .journal-entries-list {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .journal-card {
+      background: var(--card-bg);
+      border: 1.5px solid var(--border-color);
+      border-radius: var(--radius-lg);
+      padding: 14px;
+      box-shadow: var(--shadow-sm);
+      transition: all 0.2s ease;
+      position: relative;
+    }
+
+    .journal-card:hover {
+      border-color: #cbd5e1;
+      box-shadow: var(--shadow-md);
+    }
+
+    .journal-card-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      margin-bottom: 6px;
+    }
+
+    .journal-meta-row {
+      display: flex;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 6px;
+      margin-bottom: 6px;
+    }
+
+    .journal-subject-badge {
+      font-size: 0.68rem;
+      font-weight: 700;
+      padding: 2px 8px;
+      border-radius: var(--radius-full);
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    .journal-subject-badge.subj-math { background: #dbeafe; color: #1e40af; border: 1px solid #bfdbfe; }
+    .journal-subject-badge.subj-code { background: #cffafe; color: #0e7490; border: 1px solid #a5f3fc; }
+    .journal-subject-badge.subj-science { background: #d1fae5; color: #065f46; border: 1px solid #a7f3d0; }
+    .journal-subject-badge.subj-english { background: #fef3c7; color: #92400e; border: 1px solid #fde68a; }
+    .journal-subject-badge.subj-indo { background: #ffe4e6; color: #9f1239; border: 1px solid #fecdd3; }
+    .journal-subject-badge.subj-social { background: #ffedd5; color: #9a3412; border: 1px solid #fed7aa; }
+    .journal-subject-badge.subj-art { background: #f3e8ff; color: #6b21a8; border: 1px solid #e9d5ff; }
+    .journal-subject-badge.subj-general { background: #f1f5f9; color: #334155; border: 1px solid #e2e8f0; }
+
+    .journal-title {
+      font-size: 0.95rem;
+      font-weight: 800;
+      color: var(--text-main);
+      line-height: 1.3;
+      margin-bottom: 6px;
+    }
+
+    .journal-card-body {
+      font-size: 0.82rem;
+      color: var(--text-muted);
+      line-height: 1.55;
+      white-space: pre-wrap;
+      background: #f8fafc;
+      padding: 10px 12px;
+      border-radius: var(--radius-md);
+      border: 1px solid #f1f5f9;
+    }
+
+    /* ==========================================================================
+       BOTTOM NAVIGATION BAR
+       ========================================================================== */
+    .bottom-bar {
+      position: fixed;
+      bottom: 0;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 100%;
+      max-width: 420px;
+      height: var(--bottom-bar-height);
+      background: rgba(255, 255, 255, 0.96);
+      backdrop-filter: blur(14px);
+      border-top: 1.5px solid var(--border-color);
+      display: flex;
+      justify-content: space-around;
+      align-items: center;
+      z-index: 50;
+      padding: 0 10px;
+      box-shadow: 0 -6px 20px rgba(30, 58, 138, 0.08);
+    }
+
+    .nav-tab-btn {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      background: transparent;
+      border: none;
+      outline: none;
+      cursor: pointer;
+      padding: 8px 0;
+      color: #64748b;
+      transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+      position: relative;
+    }
+
+    .nav-tab-icon {
+      width: 24px;
+      height: 24px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 3px;
+      transition: transform 0.2s ease;
+    }
+
+    .nav-tab-icon svg {
+      width: 22px;
+      height: 22px;
+      stroke: currentColor;
+      stroke-width: 2.3;
+      fill: none;
+      transition: stroke 0.2s;
+    }
+
+    .nav-tab-label {
+      font-size: 0.72rem;
+      font-weight: 700;
+      letter-spacing: -0.01em;
+      transition: color 0.2s;
+    }
+
+    .nav-tab-btn.active {
+      color: var(--primary);
+    }
+
+    .nav-tab-btn.active .nav-tab-icon {
+      transform: translateY(-2px) scale(1.08);
+    }
+
+    .nav-tab-btn.active .nav-tab-icon svg {
+      stroke: var(--primary);
+    }
+
+    .nav-tab-btn.active .nav-tab-label {
+      font-weight: 800;
+      color: var(--primary);
+    }
+
+    .nav-tab-btn::after {
+      content: '';
+      position: absolute;
+      top: 4px;
+      width: 5px;
+      height: 5px;
+      border-radius: 50%;
+      background: transparent;
+      transition: background 0.2s;
+    }
+
+    .nav-tab-btn.active::after {
+      background: var(--primary);
+      box-shadow: 0 0 6px var(--primary);
+    }
+
+    /* ==========================================================================
+       MODALS: AUTH & ADMIN CONTROL PANEL
+       ========================================================================== */
+    .modal-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: rgba(15, 23, 42, 0.65);
+      backdrop-filter: blur(5px);
+      z-index: 100;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 16px;
+      animation: fadeIn 0.2s ease;
+    }
+
+    .modal-overlay.active {
+      display: flex;
+    }
+
+    .app-modal {
+      width: 100%;
+      max-width: 380px;
+      background: #ffffff;
+      border-radius: var(--radius-lg);
+      padding: 24px 20px;
+      box-shadow: var(--shadow-lg);
+      position: relative;
+      border: 1.5px solid var(--border-color);
+      max-height: 90vh;
+      overflow-y: auto;
+      animation: scaleUp 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
+
+    @keyframes scaleUp {
+      from { transform: scale(0.92); opacity: 0; }
+      to { transform: scale(1); opacity: 1; }
+    }
+
+    .modal-header {
+      text-align: center;
+      margin-bottom: 18px;
+    }
+
+    .modal-header h2 {
+      font-family: 'Outfit', 'Plus Jakarta Sans', sans-serif;
+      font-size: 1.25rem;
+      font-weight: 800;
+      color: var(--text-main);
+    }
+
+    .modal-header p {
+      font-size: 0.8rem;
+      color: var(--text-muted);
+      margin-top: 4px;
+    }
+
+    .btn-close-modal {
+      position: absolute;
+      top: 14px;
+      right: 14px;
+      background: #f1f5f9;
+      border: none;
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--text-muted);
+    }
+
+    /* Admin Panel & Customization Suite Section */
+    .admin-panel-box {
+      margin-top: 16px;
+      padding-top: 14px;
+      border-top: 1.5px dashed #cbd5e1;
+    }
+
+    .admin-panel-title {
+      font-family: 'Outfit', sans-serif;
+      font-size: 0.9rem;
+      font-weight: 800;
+      color: #b45309;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 8px;
+    }
+
+    .admin-subtabs {
+      display: flex;
+      background: #f1f5f9;
+      border-radius: var(--radius-sm);
+      padding: 3px;
+      margin: 8px 0 12px;
+      gap: 3px;
+      overflow-x: auto;
+      scrollbar-width: none;
+    }
+
+    .admin-subtabs::-webkit-scrollbar {
+      display: none;
+    }
+
+    .admin-subtab-btn {
+      flex: 1;
+      min-width: max-content;
+      padding: 6px 8px;
+      font-size: 0.7rem;
+      font-weight: 700;
+      border: none;
+      background: transparent;
+      border-radius: 6px;
+      cursor: pointer;
+      color: var(--text-muted);
+      transition: all 0.2s;
+      white-space: nowrap;
+    }
+
+    .admin-subtab-btn.active {
+      background: #ffffff;
+      color: var(--primary-dark);
+      box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+    }
+
+    .admin-subtab-content {
+      display: none;
+      animation: fadeIn 0.2s ease-in-out;
+    }
+
+    .admin-subtab-content.active {
+      display: block;
+    }
+
+    .admin-user-row {
+      background: #f8fafc;
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-sm);
+      padding: 8px 10px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 6px;
+      font-size: 0.75rem;
+    }
+
+    .admin-user-info {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .admin-user-info strong {
+      color: var(--text-main);
+    }
+
+    .admin-user-info span {
+      color: var(--text-muted);
+      font-size: 0.68rem;
+    }
+
+    .btn-admin-del {
+      background: #fee2e2;
+      color: var(--priority-high);
+      border: none;
+      padding: 4px 8px;
+      border-radius: var(--radius-sm);
+      font-size: 0.68rem;
+      font-weight: 700;
+      cursor: pointer;
+    }
+
+    /* Theme Presets & Color Pickers */
+    .admin-preset-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 6px;
+      margin-bottom: 12px;
+    }
+
+    .btn-preset-theme {
+      padding: 6px 8px;
+      border-radius: var(--radius-sm);
+      border: 1.5px solid var(--border-color);
+      background: #ffffff;
+      font-size: 0.68rem;
+      font-weight: 700;
+      color: var(--text-main);
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      transition: all 0.15s;
+    }
+
+    .btn-preset-theme:hover {
+      border-color: var(--primary);
+      transform: translateY(-1px);
+    }
+
+    .preset-color-dot {
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+      display: inline-block;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.2);
+    }
+
+    .color-picker-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 8px;
+      font-size: 0.72rem;
+      font-weight: 600;
+      color: var(--text-muted);
+    }
+
+    .color-picker-input-wrap {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .color-picker-input-wrap input[type="color"] {
+      -webkit-appearance: none;
+      border: none;
+      width: 28px;
+      height: 28px;
+      border-radius: 6px;
+      cursor: pointer;
+      background: transparent;
+      padding: 0;
+    }
+
+    .color-picker-input-wrap input[type="color"]::-webkit-color-swatch-wrapper {
+      padding: 0;
+    }
+
+    .color-picker-input-wrap input[type="color"]::-webkit-color-swatch {
+      border: 1.5px solid #cbd5e1;
+      border-radius: 6px;
+    }
+
+    .color-hex-val {
+      font-size: 0.7rem;
+      font-family: monospace;
+      color: var(--text-muted);
+      width: 58px;
+    }
+
+    .range-slider-wrap {
+      margin-bottom: 10px;
+    }
+
+    .range-slider-header {
+      display: flex;
+      justify-content: space-between;
+      font-size: 0.72rem;
+      font-weight: 700;
+      color: var(--text-muted);
+      margin-bottom: 4px;
+    }
+
+    .range-slider-input {
+      width: 100%;
+      accent-color: var(--primary);
+      cursor: pointer;
+    }
+
+    .admin-primary-save-btn {
+      width: 100%;
+      background: linear-gradient(135deg, #1e3a8a 0%, #2563eb 100%);
+      color: white;
+      border: none;
+      border-radius: var(--radius-md);
+      padding: 10px;
+      font-size: 0.82rem;
+      font-weight: 800;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      margin-top: 12px;
+      box-shadow: 0 4px 12px rgba(37, 99, 235, 0.25);
+      transition: all 0.2s;
+    }
+
+    .admin-primary-save-btn:hover {
+      background: #1d4ed8;
+      transform: translateY(-1px);
+    }
+
+    .admin-reset-btn {
+      width: 100%;
+      background: #f1f5f9;
+      color: var(--text-muted);
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-md);
+      padding: 8px;
+      font-size: 0.75rem;
+      font-weight: 700;
+      cursor: pointer;
+      margin-top: 6px;
+      transition: background 0.2s;
+    }
+
+    .admin-reset-btn:hover {
+      background: #e2e8f0;
+    }
+
+    .admin-action-btn {
+      width: 100%;
+      background: #f1f5f9;
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-md);
+      padding: 8px;
+      font-size: 0.78rem;
+      font-weight: 700;
+      color: var(--text-main);
+      cursor: pointer;
+      margin-top: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+    }
+
+    .admin-action-btn:hover {
+      background: #e2e8f0;
+    }
+
+    /* Reflection Michie Modal Photo */
+    .reflection-michie-pic {
+      width: 76px;
+      height: 76px;
+      border-radius: var(--radius-md);
+      object-fit: cover;
+      object-position: center top;
+      margin: 0 auto 12px;
+      display: block;
+      border: 3px solid #38bdf8;
+      box-shadow: 0 6px 18px rgba(37, 99, 235, 0.35);
+    }
+
+    .reflection-actions {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      margin-top: 20px;
+    }
+
+    .btn-reflection-primary {
+      width: 100%;
+      background: linear-gradient(135deg, var(--primary-dark) 0%, var(--primary) 100%);
+      color: white;
+      border: none;
+      border-radius: var(--radius-md);
+      padding: 12px;
+      font-size: 0.88rem;
+      font-weight: 800;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      box-shadow: 0 4px 14px rgba(37, 99, 235, 0.3);
+      transition: background 0.2s;
+    }
+
+    .btn-reflection-primary:hover {
+      background: #1d4ed8;
+    }
+
+    .btn-reflection-secondary {
+      width: 100%;
+      background: #f1f5f9;
+      color: var(--text-muted);
+      border: none;
+      border-radius: var(--radius-md);
+      padding: 10px;
+      font-size: 0.82rem;
+      font-weight: 700;
+      cursor: pointer;
+      text-align: center;
+    }
+
+    .auth-tabs {
+      display: flex;
+      background: #f1f5f9;
+      border-radius: var(--radius-md);
+      padding: 4px;
+      margin-bottom: 18px;
+    }
+
+    .auth-tab-btn {
+      flex: 1;
+      padding: 8px;
+      font-size: 0.8rem;
+      font-weight: 700;
+      text-align: center;
+      border: none;
+      background: transparent;
+      border-radius: var(--radius-sm);
+      cursor: pointer;
+      color: var(--text-muted);
+      transition: all 0.2s;
+    }
+
+    .auth-tab-btn.active {
+      background: #ffffff;
+      color: var(--primary);
+      box-shadow: var(--shadow-sm);
+    }
+
+    .auth-form-group {
+      margin-bottom: 14px;
+    }
+
+    .auth-label {
+      font-size: 0.75rem;
+      font-weight: 700;
+      color: var(--text-muted);
+      margin-bottom: 4px;
+      display: block;
+    }
+
+    .btn-auth-submit {
+      width: 100%;
+      background: linear-gradient(135deg, var(--primary-dark) 0%, var(--primary) 100%);
+      color: white;
+      border: none;
+      border-radius: var(--radius-md);
+      padding: 12px;
+      font-size: 0.9rem;
+      font-weight: 800;
+      cursor: pointer;
+      margin-top: 8px;
+      box-shadow: 0 4px 14px rgba(37, 99, 235, 0.3);
+      transition: background 0.2s;
+    }
+
+    .btn-auth-submit:hover {
+      background: #1d4ed8;
+    }
+
+    .profile-info-box {
+      text-align: center;
+      padding: 10px 0 16px;
+    }
+
+    .profile-large-avatar {
+      width: 64px;
+      height: 64px;
+      border-radius: 50%;
+      background: var(--primary-light);
+      color: var(--primary-dark);
+      font-size: 1.6rem;
+      font-weight: 800;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto 12px;
+      border: 3px solid var(--primary);
+      box-shadow: 0 4px 12px rgba(37, 99, 235, 0.2);
+    }
+
+    .profile-large-avatar.admin-crown {
+      background: #fef3c7;
+      color: #b45309;
+      border-color: #f59e0b;
+      box-shadow: 0 4px 12px rgba(245, 158, 11, 0.3);
+    }
+
+    .profile-name {
+      font-family: 'Outfit', 'Plus Jakarta Sans', sans-serif;
+      font-size: 1.15rem;
+      font-weight: 800;
+      color: var(--text-main);
+    }
+
+    .profile-email {
+      font-size: 0.8rem;
+      color: var(--text-muted);
+    }
+
+    .profile-stats-card {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 8px;
+      background: #f8fafc;
+      border: 1.5px solid var(--border-color);
+      border-radius: var(--radius-md);
+      padding: 12px;
+      margin: 16px 0;
+      text-align: center;
+    }
+
+    .profile-stat-val {
+      font-size: 1.15rem;
+      font-weight: 800;
+      color: var(--primary);
+    }
+
+    .profile-stat-lbl {
+      font-size: 0.7rem;
+      color: var(--text-muted);
+    }
+
+    .btn-logout {
+      width: 100%;
+      background: #fee2e2;
+      color: var(--priority-high);
+      border: none;
+      border-radius: var(--radius-md);
+      padding: 10px;
+      font-size: 0.85rem;
+      font-weight: 700;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      transition: background 0.2s;
+    }
+
+    .btn-logout:hover {
+      background: #fecaca;
+    }
+
+    /* Toast Notification Overlay */
+    .toast {
+      position: fixed;
+      top: 16px;
+      left: 50%;
+      transform: translateX(-50%) translateY(-100px);
+      background: #0f172a;
+      color: #ffffff;
+      padding: 10px 18px;
+      border-radius: var(--radius-full);
+      font-size: 0.8rem;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      box-shadow: 0 10px 25px rgba(37, 99, 235, 0.35);
+      z-index: 999;
+      opacity: 0;
+      transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+      pointer-events: none;
+      border: 1px solid #38bdf8;
+    }
+
+    .toast.show {
+      transform: translateX(-50%) translateY(0);
+      opacity: 1;
+    }
+
+    .toast-icon {
+      color: #38bdf8;
+      display: flex;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Smartphone Container -->
+  <div class="app-viewport">
+    
+    <!-- Top Header -->
+    <header class="app-header">
+      <div class="header-top">
+        <div class="brand">
+          <img src="michie.jpg" alt="Michie JKT48" class="brand-avatar-img" onerror="this.src='https://via.placeholder.com/42/2563eb/ffffff?text=M'">
+          <div class="brand-text">
+            <h1><span id="appBrandTitle">Productivity Hub</span> <span id="appBrandBadge" style="font-size:0.75rem;background:rgba(56,189,248,0.3);border:1px solid var(--accent-cyan);padding:2px 8px;border-radius:99px;color:#ffffff;">Michie ⚡</span></h1>
+            <p id="appBrandSubtitle">Fokus, Produktif & Semangat Terus!</p>
+          </div>
+        </div>
+        
+        <!-- User Badge / Auth Trigger -->
+        <div class="header-user-badge" id="headerUserBadge" onclick="openAuthModal()">
+          <div class="user-avatar" id="headerAvatar">⚡</div>
+          <span class="user-name-text" id="headerUserName">Tamu</span>
+        </div>
+      </div>
+      
+      <!-- Mini Quick Stats -->
+      <div class="header-stat-bar">
+        <div class="stat-item">
+          <div class="stat-dot"></div>
+          <span id="quickTaskStatus">0 Selesai ⚡</span>
+        </div>
+        <div class="stat-item">
+          <span style="color: #93c5fd;">Sesi Fokus: <strong id="quickFocusCount" style="color:#ffffff;">0x</strong> 🔥</span>
+        </div>
+      </div>
+    </header>
+
+    <!-- Global Admin Broadcast Banner (If set) -->
+    <div class="admin-broadcast-banner" id="adminBroadcastBanner" style="display: none;">
+      <span id="broadcastText">📢 Semangat produktif hari ini!</span>
+      <span style="font-size:0.65rem;background:rgba(255,255,255,0.25);padding:2px 6px;border-radius:4px;">Admin</span>
+    </div>
+
+    <!-- Main Screens Container -->
+    <main class="app-content">
+
+      <!-- ====================================================================
+           TAB 1: TUGAS (FAST INPUT, TOUCH CARDS, PRIORITY, DEADLINE)
+           ==================================================================== -->
+      <section id="screen-tasks" class="tab-screen active">
+        
+        <!-- Michie Photo Motivation Card -->
+        <div class="michie-banner-card">
+          <img src="michie.jpg" alt="Michie JKT48" class="michie-banner-photo" onerror="this.src='https://via.placeholder.com/56/2563eb/ffffff?text=Michie'">
+          <div class="michie-banner-content">
+            <h4><span id="michieSymbolIcon">⚡</span> <span id="michieQuoteTitle">Michie's Power Note</span></h4>
+            <p id="michieQuoteText">"Jangan tunda apa yang bisa kamu selesaikan hari ini. Gaspol terus sampai tuntas!"</p>
+          </div>
+        </div>
+
+        <!-- Browser Notification Banner -->
+        <div class="reminder-banner" id="notifBanner" style="display: none;">
+          <span>🔔 Aktifkan pengingat deadline tugasmu!</span>
+          <button class="btn-enable-notif" onclick="requestNotificationPermission()">Aktifkan</button>
+        </div>
+
+        <!-- Progress Summary Card -->
+        <div class="task-progress-card">
+          <div class="progress-info" style="flex: 1;">
+            <h3 id="progressGreeting">Target Hari Ini ⚡</h3>
+            <p id="progressSubtext">Selesaikan tugas untuk mencapai 100% target!</p>
+            <div class="progress-bar-container">
+              <div class="progress-bar-fill" id="taskProgressBar"></div>
+            </div>
+          </div>
+          <div class="progress-circle-wrap" id="progressPercentage">
+            0%
+          </div>
+        </div>
+
+        <!-- Fast Input Form -->
+        <div class="fast-input-card">
+          <input type="text" id="newTaskInput" class="input-field" placeholder="Nama tugas atau kegiatan baru... ⚡" maxlength="120">
+
+          <!-- Priority Pills -->
+          <div class="form-row-label">
+            <span>⚡</span> Tingkat Prioritas
+          </div>
+          <div class="priority-pills" id="priorityPillGroup">
+            <button type="button" class="priority-pill-btn active" data-priority="high">
+              <span class="pill-dot"></span>
+              Tinggi 🔥
+            </button>
+            <button type="button" class="priority-pill-btn" data-priority="med">
+              <span class="pill-dot"></span>
+              Sedang ⚡
+            </button>
+            <button type="button" class="priority-pill-btn" data-priority="low">
+              <span class="pill-dot"></span>
+              Santai 🌱
+            </button>
+          </div>
+
+          <!-- Deadline Input -->
+          <div class="form-row-label">
+            <span>📅</span> Tenggat Waktu (Deadline)
+          </div>
+          <div class="deadline-row">
+            <input type="datetime-local" id="taskDeadlineInput" class="deadline-input">
+          </div>
+
+          <button class="btn-submit-task" id="btnAddTask" onclick="handleAddTask()">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+              <line x1="12" y1="5" x2="12" y2="19"></line>
+              <line x1="5" y1="12" x2="19" y2="12"></line>
+            </svg>
+            Tambah Tugas ⚡
+          </button>
+        </div>
+
+        <!-- Filter Tabs -->
+        <div class="filter-tabs">
+          <button class="filter-tab-btn active" data-filter="all" onclick="setTaskFilter('all')">
+            Semua (<span id="countAll">0</span>)
+          </button>
+          <button class="filter-tab-btn" data-filter="active" onclick="setTaskFilter('active')">
+            Aktif (<span id="countActive">0</span>)
+          </button>
+          <button class="filter-tab-btn" data-filter="completed" onclick="setTaskFilter('completed')">
+            Selesai (<span id="countCompleted">0</span>)
+          </button>
+        </div>
+
+        <!-- Touch-Friendly Task Cards List -->
+        <div class="task-list" id="taskListContainer"></div>
+      </section>
+
+      <!-- ====================================================================
+           TAB 2: FOKUS
+           ==================================================================== -->
+      <section id="screen-focus" class="tab-screen">
+        
+        <div class="focus-mode-selector">
+          <div class="focus-mode-card active" id="modeCardFocus" onclick="setFocusMode('pomodoro', 25)">
+            <span class="mode-icon">🎯</span>
+            <span class="mode-title">Fokus Belajar</span>
+            <span class="mode-sub">25 Menit Penuh</span>
+          </div>
+          <div class="focus-mode-card" id="modeCardBreak" onclick="setFocusMode('shortBreak', 5)">
+            <span class="mode-icon">☕</span>
+            <span class="mode-title">Istirahat Santai</span>
+            <span class="mode-sub">5 Menit Rehat</span>
+          </div>
+        </div>
+
+        <!-- Lingkaran Penunjuk Waktu Besar -->
+        <div class="timer-circle-card">
+          <div class="timer-svg-container">
+            <svg class="timer-svg" viewBox="0 0 200 200">
+              <defs>
+                <linearGradient id="blueGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                  <stop offset="0%" stop-color="#1e3a8a" />
+                  <stop offset="50%" stop-color="#2563eb" />
+                  <stop offset="100%" stop-color="#38bdf8" />
+                </linearGradient>
+              </defs>
+              <circle class="timer-bg-circle" cx="100" cy="100" r="90"></circle>
+              <circle class="timer-progress-circle" id="timerProgressCircle" cx="100" cy="100" r="90"></circle>
+            </svg>
+            <div class="timer-display">
+              <div class="timer-time" id="timerDisplayTime">25:00</div>
+              <div class="timer-label" id="timerModeLabel">FOKUS BELAJAR ⚡</div>
+              <div class="timer-status-badge" id="timerStatusBadge">Siap Dimulai</div>
+            </div>
+          </div>
+
+          <!-- Tombol Kontrol Ramah Jempol (Mulai, Jeda, Atur Ulang) -->
+          <div class="timer-thumb-controls">
+            <button class="btn-thumb-main" id="btnToggleTimer" onclick="toggleTimer()">
+              <svg id="timerPlayIcon" viewBox="0 0 24 24">
+                <polygon points="5 3 19 12 5 21 5 3"></polygon>
+              </svg>
+              <span id="timerPlayText">Mulai Sesi</span>
+            </button>
+
+            <button class="btn-thumb-secondary" id="btnResetTimer" onclick="resetTimer()" title="Atur Ulang Timer">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/>
+                <path d="M3 3v5h5"/>
+              </svg>
+              <span>Atur Ulang</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- Suara Latar Penenang -->
+        <div class="sound-card">
+          <div class="card-title">
+            <span>Suara Latar Penenang 🌊</span>
+            <span class="badge badge-blue" id="soundStatusBadge">Nonaktif</span>
+          </div>
+          <div class="sound-grid">
+            <button class="sound-btn" data-sound="rain" onclick="toggleSound('rain')">
+              <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M16 13v8M8 13v8M12 15v8M20 16.58A5 5 0 0 0 18 7h-1.26A8 8 0 1 0 4 15.25"></path>
+              </svg>
+              <span>Hujan Deras</span>
+            </button>
+            <button class="sound-btn" data-sound="white" onclick="toggleSound('white')">
+              <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M2 12h20M2 6h20M2 18h20"></path>
+              </svg>
+              <span>Derau Putih</span>
+            </button>
+            <button class="sound-btn" data-sound="waves" onclick="toggleSound('waves')">
+              <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M2 6c.6.5 1.2 1 2.5 1C7 7 7 5 9.5 5c2.6 0 2.4 2 5 2 2.5 0 2.5-2 5-2 1.3 0 1.9.5 2.5 1M2 12c.6.5 1.2 1 2.5 1 2.5 0 2.5-2 5-2 2.6 0 2.4 2 5 2 2.5 0 2.5-2 5-2 1.3 0 1.9.5 2.5 1M2 18c.6.5 1.2 1 2.5 1 2.5 0 2.5-2 5-2 2.6 0 2.4 2 5 2 2.5 0 2.5-2 5-2 1.3 0 1.9.5 2.5 1"></path>
+              </svg>
+              <span>Ombak Samudra</span>
+            </button>
+          </div>
+        </div>
+      </section>
+
+      <!-- ====================================================================
+           TAB 3: JURNAL & REFLEKSI
+           ==================================================================== -->
+      <section id="screen-journal" class="tab-screen">
+        
+        <!-- Form Catatan Refleksi -->
+        <div class="journal-form">
+          <div class="card-title" style="margin-bottom: 12px;">
+            <span>📖 Form Refleksi Belajar</span>
+            <span class="badge badge-blue">Ringkas & Praktis</span>
+          </div>
+
+          <!-- Input Tanggal & Pilihan Mata Pelajaran -->
+          <div class="journal-form-grid">
+            <div>
+              <label class="journal-field-label">📅 Tanggal Belajar:</label>
+              <input type="date" id="journalDateInput" class="input-field" style="padding: 9px 10px; font-size: 0.8rem;">
+            </div>
+            <div>
+              <label class="journal-field-label">📚 Mata Pelajaran:</label>
+              <select id="journalSubjectInput" class="journal-select">
+                <option value="Matematika">📐 Matematika</option>
+                <option value="Informatika">💻 Informatika / Coding</option>
+                <option value="IPA">🔬 IPA / Sains / Fisika</option>
+                <option value="Bahasa Inggris">🌍 Bahasa Inggris</option>
+                <option value="Bahasa Indonesia">📖 Bahasa Indonesia</option>
+                <option value="IPS">🏛️ IPS / Sejarah</option>
+                <option value="Seni & Desain">🎨 Seni & Desain</option>
+                <option value="Umum" selected>⚡ Umum / Mandiri</option>
+              </select>
+            </div>
+          </div>
+
+          <!-- Judul / Topik Materi -->
+          <div style="margin-bottom: 8px;">
+            <label class="journal-field-label">🎯 Topik / Materi yang Dipelajari:</label>
+            <input type="text" id="journalTopicInput" class="input-field" placeholder="contoh: Aljabar Linear, Logika Percabangan..." maxlength="75">
+          </div>
+
+          <!-- Mood / Status Pemahaman -->
+          <div style="margin-bottom: 8px;">
+            <label class="journal-field-label">⚡ Status Pemahaman:</label>
+            <div class="mood-options" id="moodPicker">
+              <button type="button" class="mood-btn active" data-mood="🔥" data-text="Paham Banget">
+                <span class="emoji">🔥</span>
+                <span class="text">Paham</span>
+              </button>
+              <button type="button" class="mood-btn" data-mood="⚡" data-text="Fokus Mantap">
+                <span class="emoji">⚡</span>
+                <span class="text">Fokus</span>
+              </button>
+              <button type="button" class="mood-btn" data-mood="💡" data-text="Butuh Review">
+                <span class="emoji">💡</span>
+                <span class="text">Review</span>
+              </button>
+              <button type="button" class="mood-btn" data-mood="🌊" data-text="Santai">
+                <span class="emoji">🌊</span>
+                <span class="text">Santai</span>
+              </button>
+              <button type="button" class="mood-btn" data-mood="💤" data-text="Perlu Rehat">
+                <span class="emoji">💤</span>
+                <span class="text">Rehat</span>
+              </button>
+            </div>
+          </div>
+
+          <!-- Catatan Refleksi & Evaluasi Pemahaman -->
+          <div>
+            <label class="journal-field-label">💡 Catatan Refleksi & Ringkasan Pemahaman:</label>
+            <textarea id="journalBodyInput" class="journal-textarea" placeholder="Tuliskan poin penting yang baru kamu kuasai, rumus/konsep yang dipahami, atau evaluasi belajarmu hari ini..."></textarea>
+          </div>
+
+          <!-- Tombol Simpan Refleksi -->
+          <button type="button" class="btn-save-journal" id="btnSaveJournal" onclick="saveJournalEntry()">
+            <span>💾 Simpan Catatan Refleksi ⚡</span>
+          </button>
+        </div>
+
+        <!-- Riwayat Catatan Refleksi -->
+        <div class="card-title" style="margin-top: 4px; margin-bottom: 10px;">
+          <span>Riwayat Refleksi Belajar ⚡</span>
+          <span class="badge badge-blue" id="journalCountBadge">0 Catatan</span>
+        </div>
+        <div class="journal-entries-list" id="journalListContainer"></div>
+      </section>
+
+    </main>
+
+    <!-- ====================================================================
+         BOTTOM NAVIGATION BAR
+         ==================================================================== -->
+    <nav class="bottom-bar">
+      <!-- Tab 1: Tugas -->
+      <button class="nav-tab-btn active" data-target="tasks" onclick="switchTab('tasks')">
+        <div class="nav-tab-icon">
+          <svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round">
+            <polyline points="9 11 12 14 22 4"></polyline>
+            <path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"></path>
+          </svg>
+        </div>
+        <span class="nav-tab-label">Tugas</span>
+      </button>
+
+      <!-- Tab 2: Fokus -->
+      <button class="nav-tab-btn" data-target="focus" onclick="switchTab('focus')">
+        <div class="nav-tab-icon">
+          <svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="12" cy="12" r="10"></circle>
+            <polyline points="12 6 12 12 16 14"></polyline>
+          </svg>
+        </div>
+        <span class="nav-tab-label">Fokus</span>
+      </button>
+
+      <!-- Tab 3: Jurnal -->
+      <button class="nav-tab-btn" data-target="journal" onclick="switchTab('journal')">
+        <div class="nav-tab-icon">
+          <svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path>
+            <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path>
+            <line x1="8" y1="6" x2="16" y2="6"></line>
+            <line x1="8" y1="10" x2="16" y2="10"></line>
+          </svg>
+        </div>
+        <span class="nav-tab-label">Jurnal</span>
+      </button>
+    </nav>
+
+    <!-- ====================================================================
+         MODAL 1: AUTH & USER PROFILE / ADMIN PANEL MODAL
+         ==================================================================== -->
+    <div class="modal-overlay" id="authModalOverlay" onclick="handleAuthOverlayClick(event)">
+      <div class="app-modal" onclick="event.stopPropagation()">
+        <button class="btn-close-modal" onclick="closeAuthModal()">✕</button>
+        
+        <!-- Logged In Profile View -->
+        <div id="authProfileView" style="display: none;">
+          <div class="profile-info-box">
+            <div class="profile-large-avatar" id="profileAvatar">⚡</div>
+            <div class="profile-name" id="profileFullName">Pengguna</div>
+            <div class="profile-email" id="profileEmail">user@example.com</div>
+          </div>
+          
+          <div class="profile-stats-card">
+            <div>
+              <div class="profile-stat-val" id="profileStatTasks">0</div>
+              <div class="profile-stat-lbl">Tugas Pribadi</div>
+            </div>
+            <div>
+              <div class="profile-stat-val" id="profileStatFocus">0x</div>
+              <div class="profile-stat-lbl">Sesi Fokus</div>
+            </div>
+          </div>
+
+          <!-- ADMIN PRIVILEGED SECTION -->
+          <div class="admin-panel-box" id="adminControlSection" style="display: none;">
+            <div class="admin-panel-title">
+              <span>👑 Suite Kustomisasi Admin</span>
+              <span class="badge badge-gold">Akses Penuh</span>
+            </div>
+
+            <!-- Admin Sub-Navigation Tabs -->
+            <div class="admin-subtabs">
+              <button type="button" class="admin-subtab-btn active" onclick="switchAdminSubtab('theme', this)">🎨 Tema</button>
+              <button type="button" class="admin-subtab-btn" onclick="switchAdminSubtab('text', this)">✍️ Teks</button>
+              <button type="button" class="admin-subtab-btn" onclick="switchAdminSubtab('overlay', this)">🔮 Visual</button>
+              <button type="button" class="admin-subtab-btn" onclick="switchAdminSubtab('broadcast', this)">📢 Siaran</button>
+              <button type="button" class="admin-subtab-btn" onclick="switchAdminSubtab('users', this)">👥 User</button>
+            </div>
+
+            <!-- SUBTAB 1: TEMA & WARNA -->
+            <div class="admin-subtab-content active" id="adminSubtab-theme">
+              <div style="font-size:0.72rem;font-weight:700;color:var(--text-muted);margin-bottom:6px;">⚡ Preset Tema Cepat:</div>
+              <div class="admin-preset-grid">
+                <button type="button" class="btn-preset-theme" onclick="applyPresetTheme('michie-blue')">
+                  <span class="preset-color-dot" style="background:#2563eb;"></span> Michie Blue
+                </button>
+                <button type="button" class="btn-preset-theme" onclick="applyPresetTheme('cyber-neon')">
+                  <span class="preset-color-dot" style="background:#06b6d4;"></span> Cyber Neon
+                </button>
+                <button type="button" class="btn-preset-theme" onclick="applyPresetTheme('emerald-mint')">
+                  <span class="preset-color-dot" style="background:#10b981;"></span> Emerald Mint
+                </button>
+                <button type="button" class="btn-preset-theme" onclick="applyPresetTheme('sunset-crimson')">
+                  <span class="preset-color-dot" style="background:#ef4444;"></span> Sunset Red
+                </button>
+                <button type="button" class="btn-preset-theme" onclick="applyPresetTheme('amoled-dark')">
+                  <span class="preset-color-dot" style="background:#0f172a;"></span> Dark AMOLED
+                </button>
+                <button type="button" class="btn-preset-theme" onclick="applyPresetTheme('purple-glow')">
+                  <span class="preset-color-dot" style="background:#8b5cf6;"></span> Violet Glow
+                </button>
+              </div>
+
+              <div style="font-size:0.72rem;font-weight:700;color:var(--text-muted);margin:8px 0 6px;">🎨 Kustomisasi Palet Warna:</div>
+              <div class="color-picker-row">
+                <span>Warna Utama (Header/Tombol)</span>
+                <div class="color-picker-input-wrap">
+                  <input type="color" id="cfgColorPrimary" oninput="syncColorHex('cfgColorPrimary', 'hexColorPrimary')">
+                  <span class="color-hex-val" id="hexColorPrimary">#2563eb</span>
+                </div>
+              </div>
+              <div class="color-picker-row">
+                <span>Gradien Gelap Header</span>
+                <div class="color-picker-input-wrap">
+                  <input type="color" id="cfgColorPrimaryDark" oninput="syncColorHex('cfgColorPrimaryDark', 'hexColorPrimaryDark')">
+                  <span class="color-hex-val" id="hexColorPrimaryDark">#1e3a8a</span>
+                </div>
+              </div>
+              <div class="color-picker-row">
+                <span>Warna Aksen / Highlight</span>
+                <div class="color-picker-input-wrap">
+                  <input type="color" id="cfgColorAccent" oninput="syncColorHex('cfgColorAccent', 'hexColorAccent')">
+                  <span class="color-hex-val" id="hexColorAccent">#38bdf8</span>
+                </div>
+              </div>
+              <div class="color-picker-row">
+                <span>Latar Belakang Luar Desktop</span>
+                <div class="color-picker-input-wrap">
+                  <input type="color" id="cfgColorBgOutside" oninput="syncColorHex('cfgColorBgOutside', 'hexColorBgOutside')">
+                  <span class="color-hex-val" id="hexColorBgOutside">#cbd5e1</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- SUBTAB 2: TEKS & BRANDING -->
+            <div class="admin-subtab-content" id="adminSubtab-text">
+              <div class="auth-form-group" style="margin-bottom:8px;">
+                <label class="auth-label">Judul Utama Aplikasi</label>
+                <input type="text" id="cfgAppTitle" class="input-field" placeholder="Productivity Hub" style="padding:6px 10px;font-size:0.75rem;">
+              </div>
+              <div class="auth-form-group" style="margin-bottom:8px;">
+                <label class="auth-label">Badge Label Header</label>
+                <input type="text" id="cfgAppBadge" class="input-field" placeholder="Michie ⚡" style="padding:6px 10px;font-size:0.75rem;">
+              </div>
+              <div class="auth-form-group" style="margin-bottom:8px;">
+                <label class="auth-label">Slogan / Subtitle Header</label>
+                <input type="text" id="cfgAppSubtitle" class="input-field" placeholder="Fokus, Produktif & Semangat Terus!" style="padding:6px 10px;font-size:0.75rem;">
+              </div>
+              <div class="auth-form-group" style="margin-bottom:8px;">
+                <label class="auth-label">Judul Kartu Motivasi</label>
+                <input type="text" id="cfgMotivationTitle" class="input-field" placeholder="Michie's Power Note" style="padding:6px 10px;font-size:0.75rem;">
+              </div>
+              <div class="auth-form-group" style="margin-bottom:8px;">
+                <label class="auth-label">Isi Kutipan Motivasi</label>
+                <textarea id="cfgMotivationQuote" class="input-field" rows="2" placeholder="Tulis kutipan motivasi untuk semua user..." style="padding:6px 10px;font-size:0.75rem;resize:none;"></textarea>
+              </div>
+            </div>
+
+            <!-- SUBTAB 3: OVERLAY & VISUAL -->
+            <div class="admin-subtab-content" id="adminSubtab-overlay">
+              <div class="range-slider-wrap">
+                <div class="range-slider-header">
+                  <span>Glassmorphism Blur:</span>
+                  <span id="valOverlayBlur">8px</span>
+                </div>
+                <input type="range" min="0" max="20" value="8" id="cfgOverlayBlur" class="range-slider-input" oninput="document.getElementById('valOverlayBlur').textContent = this.value + 'px'">
+              </div>
+              <div class="range-slider-wrap">
+                <div class="range-slider-header">
+                  <span>Ikon Simbol Header:</span>
+                </div>
+                <input type="text" id="cfgHeaderIcon" class="input-field" placeholder="⚡" style="padding:6px 10px;font-size:0.75rem;" maxlength="4">
+              </div>
+              <div class="auth-form-group" style="margin-bottom:8px;">
+                <label class="auth-label">URL / File Foto Profil & Motivasi</label>
+                <input type="text" id="cfgMichieImgUrl" class="input-field" placeholder="michie.jpg atau https://..." style="padding:6px 10px;font-size:0.75rem;">
+              </div>
+            </div>
+
+            <!-- SUBTAB 4: SIARAN PENGUMUMAN -->
+            <div class="admin-subtab-content" id="adminSubtab-broadcast">
+              <label style="font-size:0.72rem;font-weight:700;color:var(--text-muted);">📢 Siaran Pesan Berjalan untuk Semua Pengguna:</label>
+              <textarea id="adminBroadcastInput" class="input-field" rows="2" placeholder="Ketik pesan siaran untuk guest & semua akun..." style="padding:6px 10px;font-size:0.75rem;margin-top:4px;resize:none;"></textarea>
+              <p style="font-size:0.68rem;color:var(--text-muted);margin-top:4px;">* Kosongkan pesan jika ingin menonaktifkan banner siaran.</p>
+            </div>
+
+            <!-- SUBTAB 5: KELOLA PENGGUNA -->
+            <div class="admin-subtab-content" id="adminSubtab-users">
+              <div style="font-size:0.75rem;color:var(--text-muted);margin-bottom:8px;">
+                📊 Total Pengguna Terdaftar: <strong id="adminTotalUsersCount" style="color:var(--primary-dark);">0</strong>
+              </div>
+              <div id="adminUserListContainer" style="max-height: 140px; overflow-y: auto; margin-bottom: 6px;">
+                <!-- Dynamic Users List -->
+              </div>
+            </div>
+
+            <!-- Admin Actions Button -->
+            <button type="button" class="admin-primary-save-btn" onclick="saveAdminGlobalConfig()">
+              <span>💾 Simpan & Terapkan ke Semua Pengguna ⚡</span>
+            </button>
+            <button type="button" class="admin-reset-btn" onclick="resetAdminGlobalConfig()">
+              <span>🔄 Reset ke Standar Michie Style</span>
+            </button>
+          </div>
+
+          <div style="margin-top: 16px;">
+            <button class="btn-logout" onclick="handleLogout()">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path>
+                <polyline points="16 17 21 12 16 7"></polyline>
+                <line x1="21" y1="12" x2="9" y2="12"></line>
+              </svg>
+              Keluar (Mode Tamu)
+            </button>
+          </div>
+        </div>
+
+        <!-- Form View (Login / Register) -->
+        <div id="authFormView">
+          <div class="modal-header">
+            <h2>Productivity Account ⚡</h2>
+            <p>Masuk ke akun pribadi atau Akun Admin</p>
+          </div>
+
+          <div class="auth-tabs">
+            <button type="button" class="auth-tab-btn active" id="tabLoginBtn" onclick="switchAuthTab('login')">Masuk (Sign In)</button>
+            <button type="button" class="auth-tab-btn" id="tabRegisterBtn" onclick="switchAuthTab('register')">Daftar (Sign Up)</button>
+          </div>
+
+          <!-- Register Name Field -->
+          <div class="auth-form-group" id="regNameGroup" style="display: none;">
+            <label class="auth-label">Nama Lengkap</label>
+            <input type="text" id="authNameInput" class="input-field" placeholder="contoh: Terry Pratama">
+          </div>
+
+          <!-- Email / Username Field -->
+          <div class="auth-form-group">
+            <label class="auth-label">Username / Email</label>
+            <input type="text" id="authEmailInput" class="input-field" placeholder="Terryy atau email@kamu.com">
+          </div>
+
+          <!-- Password Field -->
+          <div class="auth-form-group">
+            <label class="auth-label">Kata Sandi (Password)</label>
+            <input type="password" id="authPasswordInput" class="input-field" placeholder="••••••••">
+          </div>
+
+          <button class="btn-auth-submit" id="btnAuthSubmit" onclick="handleAuthSubmit()">Masuk Sekarang ⚡</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- ====================================================================
+         MODAL 2: AJAKAN REFLEKSI (SESI FOKUS TUNTAS POPUP DENGAN FOTO MICHIE)
+         ==================================================================== -->
+    <div class="modal-overlay" id="reflectionModalOverlay">
+      <div class="app-modal" onclick="event.stopPropagation()">
+        <button class="btn-close-modal" onclick="closeReflectionModal()">✕</button>
+        
+        <img src="michie.jpg" alt="Michie JKT48" class="reflection-michie-pic" onerror="this.src='https://via.placeholder.com/76/2563eb/ffffff?text=Michie'">
+        
+        <div class="modal-header" style="margin-bottom: 8px;">
+          <h2>Sesi Fokus Tuntas! ⚡</h2>
+          <p>Mantap banget! 25 menit fokus penuh berhasil kamu selesaikan.</p>
+        </div>
+
+        <p style="font-size: 0.8rem; color: #1e3a8a; text-align: center; line-height: 1.5; background: #eff6ff; padding: 10px 12px; border-radius: var(--radius-md); border: 1.5px dashed #93c5fd;">
+          💡 <strong>Evaluasi Belajar:</strong> Catat poin penting yang baru saja kamu kuasai di Jurnal Refleksi agar pemahamanmu makin mantap!
+        </p>
+
+        <div class="reflection-actions">
+          <button class="btn-reflection-primary" onclick="goToJournalWithReflection()">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+              <path d="M12 20h9"></path>
+              <path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"></path>
+            </svg>
+            Catat Evaluasi di Jurnal ⚡
+          </button>
+          <button class="btn-reflection-secondary" onclick="startBreakAfterReflection()">
+            ☕ Lanjut Istirahat 5 Menit
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Toast Notification Overlay -->
+    <div class="toast" id="appToast">
+      <div class="toast-icon">
+        ⚡
+      </div>
+      <span id="toastMessage">Pemberitahuan</span>
+    </div>
+
+  </div>
+
+  <!-- JavaScript Logic -->
+  <script>
+    // ==========================================================================
+    // 1. LOCAL STORAGE DATABASE & MULTI-USER STATE WITH ADMIN ACCOUNT
+    // ==========================================================================
+    const DB_USERS_KEY = 'prodhub_db_users';
+    const DB_ACTIVE_SESSION_KEY = 'prodhub_active_session';
+    const DB_BROADCAST_KEY = 'prodhub_admin_broadcast';
+    const GLOBAL_CONFIG_KEY = 'prodhub_global_config';
+
+    // Global Theme & Customization Configuration Schema
+    const DEFAULT_GLOBAL_CONFIG = {
+      appTitle: 'Productivity Hub',
+      appBadgeText: 'Michie ⚡',
+      appSubtitle: 'Fokus, Produktif & Semangat Terus!',
+      motivationTitle: "Michie's Power Note",
+      motivationQuote: '"Jangan tunda apa yang bisa kamu selesaikan hari ini. Gaspol terus sampai tuntas!"',
+      headerIcon: '⚡',
+      michieImgUrl: 'michie.jpg',
+      
+      colorPrimary: '#2563eb',
+      colorPrimaryDark: '#1e3a8a',
+      colorAccent: '#38bdf8',
+      colorBgOutside: '#cbd5e1',
+      
+      overlayBlur: '8px',
+      overlayOpacity: '0.15',
+      
+      broadcastMessage: '',
+      lastUpdated: null
+    };
+
+    // Current logged-in user & state
+    let currentUser = null;
+    let tasks = [];
+    let journals = [];
+    let userStats = { focusSessionsCompleted: 0 };
+
+    let currentFilter = 'all';
+    let selectedPriority = 'high';
+    let selectedMood = { emoji: '🔥', text: 'Gaspol' };
+    let notifiedTaskIds = new Set();
+    let currentAuthMode = 'login';
+
+    // ==========================================================================
+    // 2. INITIALIZATION
+    // ==========================================================================
+    document.addEventListener('DOMContentLoaded', () => {
+      initUsersDb();
+      applyGlobalCustomization(false);
+      initAuthSession();
+      setupPriorityPills();
+      setupMoodSelection();
+      initJournalDate();
+      setupTaskInputEnter();
+      checkNotificationSupport();
+      startDeadlineReminderWorker();
+    });
+
+    // Cross-tab real-time synchronization for guests and active users
+    window.addEventListener('storage', (e) => {
+      if (e.key === GLOBAL_CONFIG_KEY) {
+        applyGlobalCustomization(true);
+      }
+    });
+
+    function getGlobalConfig() {
+      const saved = localStorage.getItem(GLOBAL_CONFIG_KEY);
+      if (saved) {
+        try {
+          return { ...DEFAULT_GLOBAL_CONFIG, ...JSON.parse(saved) };
+        } catch (err) {
+          return { ...DEFAULT_GLOBAL_CONFIG };
+        }
+      }
+      return { ...DEFAULT_GLOBAL_CONFIG };
+    }
+
+    function applyGlobalCustomization(showNotice = false) {
+      const config = getGlobalConfig();
+      const root = document.documentElement;
+
+      // 1. Apply Dynamic Colors to CSS Variables
+      if (config.colorPrimary) root.style.setProperty('--primary', config.colorPrimary);
+      if (config.colorPrimaryDark) {
+        root.style.setProperty('--primary-dark', config.colorPrimaryDark);
+        root.style.setProperty('--header-grad-1', config.colorPrimaryDark);
+        root.style.setProperty('--header-grad-2', config.colorPrimaryDark);
+      }
+      if (config.colorPrimary) root.style.setProperty('--header-grad-3', config.colorPrimary);
+      if (config.colorAccent) {
+        root.style.setProperty('--accent-cyan', config.colorAccent);
+        root.style.setProperty('--accent-neon', config.colorAccent);
+      }
+      if (config.colorBgOutside) {
+        root.style.setProperty('--bg-outside', config.colorBgOutside);
+        root.style.setProperty('--bg-outside-gradient', `linear-gradient(135deg, ${config.colorBgOutside} 0%, #64748b 100%)`);
+      }
+      if (config.overlayBlur) {
+        root.style.setProperty('--overlay-blur', config.overlayBlur);
+      }
+
+      // 2. Apply Dynamic App Branding & Slogan
+      const brandTitle = document.getElementById('appBrandTitle');
+      if (brandTitle) brandTitle.textContent = config.appTitle || 'Productivity Hub';
+
+      const brandBadge = document.getElementById('appBrandBadge');
+      if (brandBadge) brandBadge.textContent = config.appBadgeText || 'Michie ⚡';
+
+      const brandSubtitle = document.getElementById('appBrandSubtitle');
+      if (brandSubtitle) brandSubtitle.textContent = config.appSubtitle || 'Fokus, Produktif & Semangat Terus!';
+
+      // 3. Apply Motivation Card Text & Symbol
+      const quoteTitle = document.getElementById('michieQuoteTitle');
+      if (quoteTitle) quoteTitle.textContent = config.motivationTitle || "Michie's Power Note";
+
+      const quoteText = document.getElementById('michieQuoteText');
+      if (quoteText) quoteText.textContent = config.motivationQuote || '"Jangan tunda apa yang bisa kamu selesaikan hari ini. Gaspol terus sampai tuntas!"';
+
+      const symbolIcon = document.getElementById('michieSymbolIcon');
+      if (symbolIcon) symbolIcon.textContent = config.headerIcon || '⚡';
+
+      // 4. Apply Dynamic Custom Michie / Avatar Media URL
+      if (config.michieImgUrl) {
+        document.querySelectorAll('.brand-avatar-img, .michie-banner-photo, .reflection-michie-pic').forEach(img => {
+          img.src = config.michieImgUrl;
+        });
+      }
+
+      // 5. Apply Global Broadcast Banner
+      const broadcastBanner = document.getElementById('adminBroadcastBanner');
+      const broadcastText = document.getElementById('broadcastText');
+      if (config.broadcastMessage && config.broadcastMessage.trim() !== '') {
+        if (broadcastText) broadcastText.textContent = `📢 ${config.broadcastMessage}`;
+        if (broadcastBanner) broadcastBanner.style.display = 'flex';
+      } else {
+        if (broadcastBanner) broadcastBanner.style.display = 'none';
+      }
+
+      // 6. Live Toast Notice for all users / guests when change occurs
+      if (showNotice) {
+        showToast('✨ Tampilan & teks aplikasi telah diperbarui oleh Admin Terryy!');
+      }
+    }
+
+    // Ensure default Admin account (Terryy ; 021012666888) is created in database
+    function initUsersDb() {
+      const users = getUsersDatabase();
+      
+      // Seed / ensure Default Admin credentials
+      if (!users['terryy']) {
+        users['terryy'] = {
+          name: 'Terryy (Admin)',
+          username: 'Terryy',
+          email: 'terryy',
+          password: '021012666888',
+          role: 'admin',
+          isAdmin: true
+        };
+        localStorage.setItem(DB_USERS_KEY, JSON.stringify(users));
+      }
+    }
+
+    function getUsersDatabase() {
+      return JSON.parse(localStorage.getItem(DB_USERS_KEY)) || {};
+    }
+
+    function initAuthSession() {
+      const activeSession = localStorage.getItem(DB_ACTIVE_SESSION_KEY);
+      const users = getUsersDatabase();
+
+      if (activeSession && activeSession !== 'guest') {
+        // Look up by direct key or by case-insensitive key
+        const foundUser = users[activeSession] || Object.values(users).find(u => 
+          (u.email && u.email.toLowerCase() === activeSession.toLowerCase()) || 
+          (u.username && u.username.toLowerCase() === activeSession.toLowerCase())
+        );
+
+        if (foundUser) {
+          currentUser = foundUser;
+        } else {
+          currentUser = null;
+          localStorage.setItem(DB_ACTIVE_SESSION_KEY, 'guest');
+        }
+      } else {
+        currentUser = null;
+        localStorage.setItem(DB_ACTIVE_SESSION_KEY, 'guest');
+      }
+
+      updateUserHeaderUI();
+      loadUserData();
+    }
+
+    function getUserStorageKey() {
+      if (!currentUser) return 'guest';
+      return currentUser.username ? currentUser.username.toLowerCase() : currentUser.email.toLowerCase();
+    }
+
+    function loadUserData() {
+      const userKey = getUserStorageKey();
+      const storageTasks = localStorage.getItem(`prodhub_tasks_${userKey}`);
+      const storageJournals = localStorage.getItem(`prodhub_journals_${userKey}`);
+      const storageStats = localStorage.getItem(`prodhub_stats_${userKey}`);
+
+      if (storageTasks) {
+        tasks = JSON.parse(storageTasks);
+      } else {
+        const today = new Date();
+        const tomorrow = new Date(today);
+        tomorrow.setHours(today.getHours() + 4);
+        const tomorrowStr = formatDateTimeForInput(tomorrow);
+
+        tasks = [
+          {
+            id: 1,
+            text: 'Selesaikan tugas coding & target utama 25 menit',
+            priority: 'high',
+            deadline: tomorrowStr,
+            completed: false,
+            createdAt: Date.now() - 3600000
+          },
+          {
+            id: 2,
+            text: 'Membaca dokumentasi & persiapan materi belajar',
+            priority: 'med',
+            deadline: '',
+            completed: false,
+            createdAt: Date.now()
+          }
+        ];
+        saveTasks();
+      }
+
+      if (storageJournals) {
+        journals = JSON.parse(storageJournals);
+      } else {
+        const today = new Date();
+        const displayDate = today.toLocaleDateString('id-ID', { weekday: 'short', day: 'numeric', month: 'short', year: 'numeric' });
+        journals = [
+          {
+            id: 1,
+            subject: 'Informatika',
+            topic: 'Pengantar Logika & Pemrograman Modular ⚡',
+            body: 'Berhasil memahami konsep percabangan logika dan pemecahan fungsi modular. Semua target terselesaikan dengan baik!',
+            displayDate: displayDate,
+            date: today.toISOString().split('T')[0],
+            mood: '🔥',
+            moodText: 'Paham Banget',
+            createdAt: Date.now() - 3600000
+          }
+        ];
+        saveJournals();
+      }
+
+      if (storageStats) {
+        userStats = JSON.parse(storageStats);
+      } else {
+        userStats = { focusSessionsCompleted: 0 };
+        saveStats();
+      }
+
+      renderTasks();
+      renderJournals();
+      updateQuickStats();
+    }
+
+    function updateUserHeaderUI() {
+      const badge = document.getElementById('headerUserBadge');
+      const avatar = document.getElementById('headerAvatar');
+      const nameText = document.getElementById('headerUserName');
+
+      if (currentUser) {
+        const isAdm = currentUser.isAdmin || currentUser.role === 'admin';
+        if (isAdm) {
+          badge.classList.add('is-admin');
+          avatar.textContent = '👑';
+          nameText.textContent = currentUser.name || 'Admin';
+        } else {
+          badge.classList.remove('is-admin');
+          const initial = currentUser.name.trim().charAt(0).toUpperCase() || 'U';
+          avatar.textContent = initial;
+          nameText.textContent = currentUser.name;
+        }
+      } else {
+        badge.classList.remove('is-admin');
+        avatar.textContent = '⚡';
+        nameText.textContent = 'Tamu (Masuk)';
+      }
+    }
+
+    // Modal Handlers
+    function openAuthModal() {
+      const modal = document.getElementById('authModalOverlay');
+      const profileView = document.getElementById('authProfileView');
+      const formView = document.getElementById('authFormView');
+      const adminSection = document.getElementById('adminControlSection');
+
+      if (currentUser) {
+        profileView.style.display = 'block';
+        formView.style.display = 'none';
+
+        const isAdm = currentUser.isAdmin || currentUser.role === 'admin';
+        const avatarBox = document.getElementById('profileAvatar');
+        
+        if (isAdm) {
+          avatarBox.textContent = '👑';
+          avatarBox.className = 'profile-large-avatar admin-crown';
+          adminSection.style.display = 'block';
+          renderAdminPanel();
+        } else {
+          avatarBox.textContent = currentUser.name.charAt(0).toUpperCase();
+          avatarBox.className = 'profile-large-avatar';
+          adminSection.style.display = 'none';
+        }
+
+        document.getElementById('profileFullName').textContent = currentUser.name;
+        document.getElementById('profileEmail').textContent = currentUser.email || currentUser.username;
+        document.getElementById('profileStatTasks').textContent = tasks.length;
+        document.getElementById('profileStatFocus').textContent = `${userStats.focusSessionsCompleted || 0}x`;
+      } else {
+        profileView.style.display = 'none';
+        formView.style.display = 'block';
+        switchAuthTab('login');
+      }
+
+      modal.classList.add('active');
+    }
+
+    function closeAuthModal() {
+      document.getElementById('authModalOverlay').classList.remove('active');
+    }
+
+    function handleAuthOverlayClick(event) {
+      if (event.target.id === 'authModalOverlay') {
+        closeAuthModal();
+      }
+    }
+
+    function switchAuthTab(mode) {
+      currentAuthMode = mode;
+      const tabLogin = document.getElementById('tabLoginBtn');
+      const tabReg = document.getElementById('tabRegisterBtn');
+      const regNameGroup = document.getElementById('regNameGroup');
+      const submitBtn = document.getElementById('btnAuthSubmit');
+
+      if (mode === 'login') {
+        tabLogin.classList.add('active');
+        tabReg.classList.remove('active');
+        regNameGroup.style.display = 'none';
+        submitBtn.textContent = 'Masuk Sekarang ⚡';
+      } else {
+        tabLogin.classList.remove('active');
+        tabReg.classList.add('active');
+        regNameGroup.style.display = 'block';
+        submitBtn.textContent = 'Daftar Akun Baru ⚡';
+      }
+    }
+
+    function handleAuthSubmit() {
+      const inputUser = document.getElementById('authEmailInput').value.trim();
+      const passInput = document.getElementById('authPasswordInput').value.trim();
+      const nameInput = document.getElementById('authNameInput').value.trim();
+      const users = getUsersDatabase();
+
+      if (!inputUser || !passInput) {
+        showToast('Username/Email dan kata sandi wajib diisi!');
+        return;
+      }
+
+      if (currentAuthMode === 'register') {
+        if (!nameInput) {
+          showToast('Nama lengkap wajib diisi!');
+          return;
+        }
+
+        const key = inputUser.toLowerCase();
+        if (users[key] || (key === 'terryy')) {
+          showToast('Username/Email ini sudah terdaftar. Silakan Masuk.');
+          return;
+        }
+
+        const newUser = {
+          name: nameInput,
+          email: inputUser,
+          username: inputUser,
+          password: passInput,
+          role: 'user',
+          isAdmin: false
+        };
+
+        users[key] = newUser;
+        localStorage.setItem(DB_USERS_KEY, JSON.stringify(users));
+        currentUser = newUser;
+        localStorage.setItem(DB_ACTIVE_SESSION_KEY, key);
+
+        updateUserHeaderUI();
+        loadUserData();
+        closeAuthModal();
+        showToast(`Selamat datang, ${newUser.name}! ⚡`);
+      } else {
+        // SIGN IN
+        // Check for exact or case-insensitive match (including Admin Terryy)
+        const userKey = inputUser.toLowerCase();
+        const foundUser = users[userKey] || Object.values(users).find(u => 
+          (u.email && u.email.toLowerCase() === userKey) ||
+          (u.username && u.username.toLowerCase() === userKey)
+        );
+
+        if (!foundUser || foundUser.password !== passInput) {
+          showToast('Username atau kata sandi tidak cocok!');
+          return;
+        }
+
+        currentUser = foundUser;
+        localStorage.setItem(DB_ACTIVE_SESSION_KEY, userKey);
+
+        updateUserHeaderUI();
+        loadUserData();
+        closeAuthModal();
+        
+        if (currentUser.isAdmin || currentUser.role === 'admin') {
+          showToast(`👑 Selamat datang, Administrator ${currentUser.name}!`);
+        } else {
+          showToast(`Hai ${currentUser.name}! Selamat beraktivitas ⚡`);
+        }
+      }
+
+      document.getElementById('authEmailInput').value = '';
+      document.getElementById('authPasswordInput').value = '';
+      document.getElementById('authNameInput').value = '';
+    }
+
+    function handleLogout() {
+      currentUser = null;
+      localStorage.setItem(DB_ACTIVE_SESSION_KEY, 'guest');
+      updateUserHeaderUI();
+      loadUserData();
+      closeAuthModal();
+      showToast('Beralih ke Mode Tamu ⚡');
+    }
+
+    // ==========================================================================
+    // 3. ADMIN CUSTOMIZATION & USER MANAGEMENT FUNCTIONS
+    // ==========================================================================
+    function switchAdminSubtab(tabName, btnElement) {
+      document.querySelectorAll('.admin-subtab-btn').forEach(b => b.classList.remove('active'));
+      document.querySelectorAll('.admin-subtab-content').forEach(c => c.classList.remove('active'));
+
+      if (btnElement) btnElement.classList.add('active');
+      const targetContent = document.getElementById(`adminSubtab-${tabName}`);
+      if (targetContent) targetContent.classList.add('active');
+    }
+
+    function syncColorHex(pickerId, hexId) {
+      const picker = document.getElementById(pickerId);
+      const hexSpan = document.getElementById(hexId);
+      if (picker && hexSpan) {
+        hexSpan.textContent = picker.value;
+      }
+    }
+
+    function applyPresetTheme(presetKey) {
+      const presets = {
+        'michie-blue': {
+          primary: '#2563eb',
+          dark: '#1e3a8a',
+          accent: '#38bdf8',
+          outside: '#cbd5e1',
+          blur: '8px',
+          icon: '⚡'
+        },
+        'cyber-neon': {
+          primary: '#06b6d4',
+          dark: '#0f172a',
+          accent: '#22d3ee',
+          outside: '#1e1b4b',
+          blur: '12px',
+          icon: '🌌'
+        },
+        'emerald-mint': {
+          primary: '#059669',
+          dark: '#064e3b',
+          accent: '#34d399',
+          outside: '#ccfbf1',
+          blur: '8px',
+          icon: '🍃'
+        },
+        'sunset-crimson': {
+          primary: '#e11d48',
+          dark: '#881337',
+          accent: '#fb7185',
+          outside: '#ffe4e6',
+          blur: '8px',
+          icon: '🔥'
+        },
+        'amoled-dark': {
+          primary: '#3b82f6',
+          dark: '#090d16',
+          accent: '#60a5fa',
+          outside: '#020617',
+          blur: '16px',
+          icon: '🖤'
+        },
+        'purple-glow': {
+          primary: '#7c3aed',
+          dark: '#2e1065',
+          accent: '#c084fc',
+          outside: '#f3e8ff',
+          blur: '10px',
+          icon: '🔮'
+        }
+      };
+
+      const p = presets[presetKey];
+      if (!p) return;
+
+      document.getElementById('cfgColorPrimary').value = p.primary;
+      document.getElementById('hexColorPrimary').textContent = p.primary;
+      document.getElementById('cfgColorPrimaryDark').value = p.dark;
+      document.getElementById('hexColorPrimaryDark').textContent = p.dark;
+      document.getElementById('cfgColorAccent').value = p.accent;
+      document.getElementById('hexColorAccent').textContent = p.accent;
+      document.getElementById('cfgColorBgOutside').value = p.outside;
+      document.getElementById('hexColorBgOutside').textContent = p.outside;
+
+      const blurNum = parseInt(p.blur);
+      document.getElementById('cfgOverlayBlur').value = blurNum;
+      document.getElementById('valOverlayBlur').textContent = p.blur;
+
+      document.getElementById('cfgHeaderIcon').value = p.icon;
+
+      showToast(`Preset tema "${presetKey}" dipilih! Klik Simpan untuk terapkan ⚡`);
+    }
+
+    function populateAdminCustomizationForm() {
+      const config = getGlobalConfig();
+
+      // Theme Colors
+      const p = document.getElementById('cfgColorPrimary');
+      if (p) {
+        p.value = config.colorPrimary || '#2563eb';
+        document.getElementById('hexColorPrimary').textContent = p.value;
+      }
+      const pd = document.getElementById('cfgColorPrimaryDark');
+      if (pd) {
+        pd.value = config.colorPrimaryDark || '#1e3a8a';
+        document.getElementById('hexColorPrimaryDark').textContent = pd.value;
+      }
+      const acc = document.getElementById('cfgColorAccent');
+      if (acc) {
+        acc.value = config.colorAccent || '#38bdf8';
+        document.getElementById('hexColorAccent').textContent = acc.value;
+      }
+      const bg = document.getElementById('cfgColorBgOutside');
+      if (bg) {
+        bg.value = config.colorBgOutside || '#cbd5e1';
+        document.getElementById('hexColorBgOutside').textContent = bg.value;
+      }
+
+      // Text Branding
+      const title = document.getElementById('cfgAppTitle');
+      if (title) title.value = config.appTitle || 'Productivity Hub';
+
+      const badge = document.getElementById('cfgAppBadge');
+      if (badge) badge.value = config.appBadgeText || 'Michie ⚡';
+
+      const subtitle = document.getElementById('cfgAppSubtitle');
+      if (subtitle) subtitle.value = config.appSubtitle || 'Fokus, Produktif & Semangat Terus!';
+
+      const motTitle = document.getElementById('cfgMotivationTitle');
+      if (motTitle) motTitle.value = config.motivationTitle || "Michie's Power Note";
+
+      const motQuote = document.getElementById('cfgMotivationQuote');
+      if (motQuote) motQuote.value = config.motivationQuote || '"Jangan tunda apa yang bisa kamu selesaikan hari ini. Gaspol terus sampai tuntas!"';
+
+      // Visual & Overlay
+      const blur = document.getElementById('cfgOverlayBlur');
+      if (blur) {
+        const bVal = parseInt(config.overlayBlur) || 8;
+        blur.value = bVal;
+        document.getElementById('valOverlayBlur').textContent = `${bVal}px`;
+      }
+
+      const icon = document.getElementById('cfgHeaderIcon');
+      if (icon) icon.value = config.headerIcon || '⚡';
+
+      const img = document.getElementById('cfgMichieImgUrl');
+      if (img) img.value = config.michieImgUrl || 'michie.jpg';
+
+      // Broadcast message
+      const bCast = document.getElementById('adminBroadcastInput');
+      if (bCast) bCast.value = config.broadcastMessage || '';
+    }
+
+    function saveAdminGlobalConfig() {
+      const blurVal = document.getElementById('cfgOverlayBlur').value;
+
+      const newConfig = {
+        appTitle: document.getElementById('cfgAppTitle').value.trim() || 'Productivity Hub',
+        appBadgeText: document.getElementById('cfgAppBadge').value.trim() || 'Michie ⚡',
+        appSubtitle: document.getElementById('cfgAppSubtitle').value.trim() || 'Fokus, Produktif & Semangat Terus!',
+        motivationTitle: document.getElementById('cfgMotivationTitle').value.trim() || "Michie's Power Note",
+        motivationQuote: document.getElementById('cfgMotivationQuote').value.trim() || '"Jangan tunda apa yang bisa kamu selesaikan hari ini. Gaspol terus sampai tuntas!"',
+        headerIcon: document.getElementById('cfgHeaderIcon').value.trim() || '⚡',
+        michieImgUrl: document.getElementById('cfgMichieImgUrl').value.trim() || 'michie.jpg',
+
+        colorPrimary: document.getElementById('cfgColorPrimary').value,
+        colorPrimaryDark: document.getElementById('cfgColorPrimaryDark').value,
+        colorAccent: document.getElementById('cfgColorAccent').value,
+        colorBgOutside: document.getElementById('cfgColorBgOutside').value,
+
+        overlayBlur: `${blurVal}px`,
+        overlayOpacity: '0.15',
+
+        broadcastMessage: document.getElementById('adminBroadcastInput').value.trim(),
+        lastUpdated: Date.now()
+      };
+
+      localStorage.setItem(GLOBAL_CONFIG_KEY, JSON.stringify(newConfig));
+      applyGlobalCustomization(false);
+      showToast('✨ Kustomisasi berhasil disimpan & disiarkan ke semua pengguna! ⚡');
+    }
+
+    function resetAdminGlobalConfig() {
+      if (confirm('Kembalikan semua warna, teks, dan overlay ke pengaturan awal standar Michie?')) {
+        localStorage.setItem(GLOBAL_CONFIG_KEY, JSON.stringify(DEFAULT_GLOBAL_CONFIG));
+        populateAdminCustomizationForm();
+        applyGlobalCustomization(false);
+        showToast('🔄 Tema telah diatur ulang ke Standar Michie Style ⚡');
+      }
+    }
+
+    function renderAdminPanel() {
+      populateAdminCustomizationForm();
+      const users = getUsersDatabase();
+      const listContainer = document.getElementById('adminUserListContainer');
+      const totalUsersCount = document.getElementById('adminTotalUsersCount');
+
+      const userEntries = Object.entries(users);
+      if (totalUsersCount) totalUsersCount.textContent = `${userEntries.length} Akun`;
+
+      if (listContainer) {
+        listContainer.innerHTML = userEntries.map(([key, u]) => {
+          const isAdm = u.isAdmin || u.role === 'admin';
+          const userTasksKey = `prodhub_tasks_${key}`;
+          const uTasks = JSON.parse(localStorage.getItem(userTasksKey)) || [];
+          const taskCount = uTasks.length;
+
+          return `
+            <div class="admin-user-row">
+              <div class="admin-user-info">
+                <strong>${escapeHtml(u.name)} ${isAdm ? '👑' : ''}</strong>
+                <span>User: ${escapeHtml(u.username || u.email)} • ${taskCount} Tugas</span>
+              </div>
+              <div>
+                ${!isAdm ? `<button class="btn-admin-del" onclick="adminDeleteUser('${key}')">Hapus</button>` : `<span class="badge badge-gold">Admin</span>`}
+              </div>
+            </div>
+          `;
+        }).join('');
+      }
+    }
+
+    function adminDeleteUser(userKey) {
+      if (confirm(`Hapus akun pengguna "${userKey}" beserta datanya?`)) {
+        const users = getUsersDatabase();
+        delete users[userKey];
+        localStorage.setItem(DB_USERS_KEY, JSON.stringify(users));
+        localStorage.removeItem(`prodhub_tasks_${userKey}`);
+        localStorage.removeItem(`prodhub_journals_${userKey}`);
+        localStorage.removeItem(`prodhub_stats_${userKey}`);
+        renderAdminPanel();
+        showToast('Akun pengguna berhasil dihapus');
+      }
+    }
+
+    // ==========================================================================
+    // 4. TAB NAVIGATION & TOAST HELPER
+    // ==========================================================================
+    function switchTab(tabId) {
+      document.querySelectorAll('.tab-screen').forEach(screen => {
+        screen.classList.remove('active');
+      });
+      const activeScreen = document.getElementById(`screen-${tabId}`);
+      if (activeScreen) activeScreen.classList.add('active');
+
+      document.querySelectorAll('.nav-tab-btn').forEach(btn => {
+        btn.classList.toggle('active', btn.dataset.target === tabId);
+      });
+
+      if (tabId === 'journal') {
+        initJournalDate();
+      }
+
+      document.querySelector('.app-viewport').scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    let toastTimeout;
+    function showToast(message) {
+      const toast = document.getElementById('appToast');
+      const toastMsg = document.getElementById('toastMessage');
+      toastMsg.textContent = message;
+      toast.classList.add('show');
+      
+      clearTimeout(toastTimeout);
+      toastTimeout = setTimeout(() => {
+        toast.classList.remove('show');
+      }, 2800);
+    }
+
+    // ==========================================================================
+    // 5. TAB 1: TUGAS
+    // ==========================================================================
+    function setupPriorityPills() {
+      const pills = document.querySelectorAll('#priorityPillGroup .priority-pill-btn');
+      pills.forEach(pill => {
+        pill.addEventListener('click', () => {
+          pills.forEach(p => p.classList.remove('active'));
+          pill.classList.add('active');
+          selectedPriority = pill.dataset.priority;
+        });
+      });
+    }
+
+    function setupTaskInputEnter() {
+      const input = document.getElementById('newTaskInput');
+      input.addEventListener('keypress', (e) => {
+        if (e.key === 'Enter') handleAddTask();
+      });
+    }
+
+    function handleAddTask() {
+      const input = document.getElementById('newTaskInput');
+      const deadlineInput = document.getElementById('taskDeadlineInput');
+      const text = input.value.trim();
+
+      if (!text) {
+        showToast('Ketik nama tugasmu dulu ya! ⚡');
+        input.focus();
+        return;
+      }
+
+      const newTask = {
+        id: Date.now(),
+        text: text,
+        priority: selectedPriority,
+        deadline: deadlineInput.value || '',
+        completed: false,
+        createdAt: Date.now()
+      };
+
+      tasks.unshift(newTask);
+      saveTasks();
+      renderTasks();
+
+      input.value = '';
+      deadlineInput.value = '';
+      showToast('Tugas baru ditambahkan! ⚡');
+    }
+
+    function toggleTask(id) {
+      tasks = tasks.map(t => {
+        if (t.id === id) {
+          const updated = { ...t, completed: !t.completed };
+          if (updated.completed) playCoolClickSound();
+          return updated;
+        }
+        return t;
+      });
+      saveTasks();
+      renderTasks();
+    }
+
+    function deleteTask(id, event) {
+      if (event) event.stopPropagation();
+      tasks = tasks.filter(t => t.id !== id);
+      saveTasks();
+      renderTasks();
+      showToast('Tugas telah dihapus ⚡');
+    }
+
+    function setTaskFilter(filter) {
+      currentFilter = filter;
+      document.querySelectorAll('.filter-tab-btn').forEach(btn => {
+        btn.classList.toggle('active', btn.dataset.filter === filter);
+      });
+      renderTasks();
+    }
+
+    function saveTasks() {
+      const userKey = getUserStorageKey();
+      localStorage.setItem(`prodhub_tasks_${userKey}`, JSON.stringify(tasks));
+      updateQuickStats();
+    }
+
+    function renderTasks() {
+      const container = document.getElementById('taskListContainer');
+      const total = tasks.length;
+      const completed = tasks.filter(t => t.completed).length;
+      const active = total - completed;
+
+      document.getElementById('countAll').textContent = total;
+      document.getElementById('countActive').textContent = active;
+      document.getElementById('countCompleted').textContent = completed;
+
+      const pct = total === 0 ? 0 : Math.round((completed / total) * 100);
+      document.getElementById('taskProgressBar').style.width = `${pct}%`;
+      document.getElementById('progressPercentage').textContent = `${pct}%`;
+
+      const subtext = document.getElementById('progressSubtext');
+      if (pct === 100 && total > 0) {
+        subtext.textContent = '🎉 Luar biasa! Semua tugas beres!';
+      } else {
+        subtext.textContent = `${completed} dari ${total} tugas terselesaikan ⚡`;
+      }
+
+      let filtered = tasks;
+      if (currentFilter === 'active') {
+        filtered = tasks.filter(t => !t.completed);
+      } else if (currentFilter === 'completed') {
+        filtered = tasks.filter(t => t.completed);
+      }
+
+      if (filtered.length === 0) {
+        container.innerHTML = `
+          <div class="empty-state">
+            <svg viewBox="0 0 24 24" fill="none" stroke-width="1.8">
+              <path d="M9 11l3 3L22 4"></path>
+              <path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"></path>
+            </svg>
+            <p>${currentFilter === 'completed' ? 'Belum ada tugas yang selesai ⚡' : 'Tidak ada tugas dalam daftar ini ⚡'}</p>
+          </div>
+        `;
+        return;
+      }
+
+      const now = new Date();
+
+      container.innerHTML = filtered.map(t => {
+        let priorityBadge = '<span class="badge badge-high"><span style="width:6px;height:6px;border-radius:50%;background:#ef4444;"></span>Tinggi 🔥</span>';
+        if (t.priority === 'med') {
+          priorityBadge = '<span class="badge badge-med"><span style="width:6px;height:6px;border-radius:50%;background:#f59e0b;"></span>Sedang ⚡</span>';
+        } else if (t.priority === 'low') {
+          priorityBadge = '<span class="badge badge-low"><span style="width:6px;height:6px;border-radius:50%;background:#10b981;"></span>Santai 🌱</span>';
+        }
+
+        let deadlineMarkup = '';
+        if (t.deadline) {
+          const dDate = new Date(t.deadline);
+          const isOverdue = !t.completed && dDate < now;
+          const formattedDate = formatDeadlineDisplay(dDate);
+
+          deadlineMarkup = `
+            <span class="task-deadline-info ${isOverdue ? 'overdue' : ''}">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <circle cx="12" cy="12" r="10"></circle>
+                <polyline points="12 6 12 12 16 14"></polyline>
+              </svg>
+              ${isOverdue ? 'Lewat: ' : 'Tenggat: '}${formattedDate}
+            </span>
+          `;
+        }
+
+        return `
+          <div class="task-touch-card ${t.completed ? 'completed' : ''}" onclick="toggleTask(${t.id})">
+            <div class="task-card-left">
+              <div class="round-checkbox">
+                <svg viewBox="0 0 24 24" fill="none">
+                  <polyline points="20 6 9 17 4 12"></polyline>
+                </svg>
+              </div>
+              <div class="task-content-center">
+                <div class="task-title-text">${escapeHtml(t.text)}</div>
+                <div class="task-meta-row">
+                  ${priorityBadge}
+                  ${deadlineMarkup}
+                </div>
+              </div>
+            </div>
+            <button class="btn-delete-task" onclick="deleteTask(${t.id}, event)" title="Hapus Tugas">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <polyline points="3 6 5 6 21 6"></polyline>
+                <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
+              </svg>
+            </button>
+          </div>
+        `;
+      }).join('');
+    }
+
+    function formatDeadlineDisplay(date) {
+      const options = { day: 'numeric', month: 'short', hour: '2-digit', minute: '2-digit' };
+      return date.toLocaleDateString('id-ID', options);
+    }
+
+    function formatDateTimeForInput(date) {
+      const pad = (n) => String(n).padStart(2, '0');
+      return `${date.getFullYear()}-${pad(date.getMonth()+1)}-${pad(date.getDate())}T${pad(date.getHours())}:${pad(date.getMinutes())}`;
+    }
+
+    function checkNotificationSupport() {
+      if (!("Notification" in window)) return;
+      if (Notification.permission !== "granted" && Notification.permission !== "denied") {
+        document.getElementById('notifBanner').style.display = 'flex';
+      }
+    }
+
+    function requestNotificationPermission() {
+      if (!("Notification" in window)) {
+        showToast('Browser ini tidak mendukung notifikasi Web');
+        return;
+      }
+      Notification.requestPermission().then(permission => {
+        if (permission === 'granted') {
+          document.getElementById('notifBanner').style.display = 'none';
+          showToast('🔔 Notifikasi pengingat aktif! ⚡');
+        }
+      });
+    }
+
+    function startDeadlineReminderWorker() {
+      setInterval(() => {
+        const now = Date.now();
+        tasks.forEach(t => {
+          if (!t.completed && t.deadline && !notifiedTaskIds.has(t.id)) {
+            const deadlineTime = new Date(t.deadline).getTime();
+            const timeDiff = deadlineTime - now;
+
+            if (timeDiff <= 15 * 60 * 1000 && timeDiff > -120 * 1000) {
+              triggerTaskReminder(t);
+              notifiedTaskIds.add(t.id);
+            }
+          }
+        });
+      }, 30000);
+    }
+
+    function triggerTaskReminder(task) {
+      playCoolClickSound();
+      showToast(`⏰ Pengingat: Tugas "${task.text}" mendekati deadline! ⚡`);
+
+      if ("Notification" in window && Notification.permission === "granted") {
+        new Notification("⏰ Pengingat Deadline", {
+          body: `Tugas: "${task.text}" segera jatuh tempo! Gaspol! ⚡`,
+          icon: "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%232563eb'><circle cx='12' cy='12' r='10'/></svg>"
+        });
+      }
+    }
+
+    // ==========================================================================
+    // 6. TAB 2: FOKUS
+    // ==========================================================================
+    let timerTotalSeconds = 25 * 60;
+    let timerRemainingSeconds = 25 * 60;
+    let timerInterval = null;
+    let isTimerRunning = false;
+    let currentTimerMode = 'pomodoro';
+    const FULL_DASH_ARRAY = 565.48;
+
+    function setFocusMode(mode, minutes) {
+      if (isTimerRunning) pauseTimer();
+      currentTimerMode = mode;
+      timerTotalSeconds = minutes * 60;
+      timerRemainingSeconds = timerTotalSeconds;
+
+      const modeFocusCard = document.getElementById('modeCardFocus');
+      const modeBreakCard = document.getElementById('modeCardBreak');
+      const modeLabel = document.getElementById('timerModeLabel');
+
+      if (mode === 'pomodoro') {
+        modeFocusCard.classList.add('active');
+        modeBreakCard.classList.remove('active');
+        modeLabel.textContent = 'FOKUS BELAJAR ⚡';
+      } else {
+        modeFocusCard.classList.remove('active');
+        modeBreakCard.classList.add('active');
+        modeLabel.textContent = 'ISTIRAHAT SANTAI ☕';
+      }
+
+      document.getElementById('timerStatusBadge').textContent = 'Siap Dimulai';
+      document.getElementById('timerStatusBadge').className = 'timer-status-badge';
+      updateTimerDisplay();
+    }
+
+    function toggleTimer() {
+      if (isTimerRunning) {
+        pauseTimer();
+      } else {
+        startTimer();
+      }
+    }
+
+    function startTimer() {
+      if (isTimerRunning) return;
+      isTimerRunning = true;
+      updatePlayControlsUI();
+      playCoolClickSound();
+
+      const statusBadge = document.getElementById('timerStatusBadge');
+      statusBadge.textContent = 'Sedang Berjalan ⚡';
+      statusBadge.className = 'timer-status-badge running';
+
+      timerInterval = setInterval(() => {
+        if (timerRemainingSeconds > 0) {
+          timerRemainingSeconds--;
+          updateTimerDisplay();
+        } else {
+          onTimerZeroReached();
+        }
+      }, 1000);
+    }
+
+    function pauseTimer() {
+      isTimerRunning = false;
+      clearInterval(timerInterval);
+      updatePlayControlsUI();
+
+      const statusBadge = document.getElementById('timerStatusBadge');
+      statusBadge.textContent = 'Dijeda ⏸️';
+      statusBadge.className = 'timer-status-badge';
+    }
+
+    function resetTimer() {
+      pauseTimer();
+      timerRemainingSeconds = timerTotalSeconds;
+      updateTimerDisplay();
+
+      const statusBadge = document.getElementById('timerStatusBadge');
+      statusBadge.textContent = 'Siap Dimulai';
+      statusBadge.className = 'timer-status-badge';
+      showToast('Timer diatur ulang ⚡');
+    }
+
+    function onTimerZeroReached() {
+      pauseTimer();
+      playElectricChime();
+
+      if (currentTimerMode === 'pomodoro') {
+        userStats.focusSessionsCompleted = (userStats.focusSessionsCompleted || 0) + 1;
+        saveStats();
+        updateQuickStats();
+        openReflectionModal();
+      } else {
+        showToast('☕ Sesi istirahat santai selesai! Siap fokus lagi ya!');
+        setFocusMode('pomodoro', 25);
+      }
+    }
+
+    function updateTimerDisplay() {
+      const minutes = Math.floor(timerRemainingSeconds / 60);
+      const seconds = timerRemainingSeconds % 60;
+      const formatted = `${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
+      document.getElementById('timerDisplayTime').textContent = formatted;
+
+      const circle = document.getElementById('timerProgressCircle');
+      const fraction = timerRemainingSeconds / timerTotalSeconds;
+      const offset = FULL_DASH_ARRAY * (1 - fraction);
+      circle.style.strokeDashoffset = offset;
+    }
+
+    function updatePlayControlsUI() {
+      const btn = document.getElementById('btnToggleTimer');
+      const icon = document.getElementById('timerPlayIcon');
+      const text = document.getElementById('timerPlayText');
+
+      if (isTimerRunning) {
+        btn.classList.add('is-paused');
+        text.textContent = 'Jeda';
+        icon.innerHTML = `
+          <rect x="6" y="4" width="4" height="16" rx="1"></rect>
+          <rect x="14" y="4" width="4" height="16" rx="1"></rect>
+        `;
+      } else {
+        btn.classList.remove('is-paused');
+        text.textContent = 'Mulai Sesi';
+        icon.innerHTML = `
+          <polygon points="5 3 19 12 5 21 5 3"></polygon>
+        `;
+      }
+    }
+
+    // --- COOL SOUND ENGINE (WEB AUDIO API) ---
+    let audioCtx = null;
+    let currentAmbient = null;
+    let ambientNodes = [];
+
+    function getAudioContext() {
+      if (!audioCtx) {
+        audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+      }
+      if (audioCtx.state === 'suspended') {
+        audioCtx.resume();
+      }
+      return audioCtx;
+    }
+
+    function playCoolClickSound() {
+      try {
+        const ctx = getAudioContext();
+        const osc = ctx.createOscillator();
+        const gain = ctx.createGain();
+        osc.type = 'sine';
+        osc.frequency.setValueAtTime(587.33, ctx.currentTime);
+        osc.frequency.exponentialRampToValueAtTime(880, ctx.currentTime + 0.07);
+        gain.gain.setValueAtTime(0.2, ctx.currentTime);
+        gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.08);
+        osc.connect(gain);
+        gain.connect(ctx.destination);
+        osc.start();
+        osc.stop(ctx.currentTime + 0.08);
+      } catch (e) {}
+    }
+
+    function playElectricChime() {
+      try {
+        const ctx = getAudioContext();
+        const notes = [
+          { f: 440.00, start: 0, dur: 0.12 },
+          { f: 554.37, start: 0.12, dur: 0.12 },
+          { f: 659.25, start: 0.24, dur: 0.14 },
+          { f: 880.00, start: 0.38, dur: 0.18 },
+          { f: 1108.73, start: 0.56, dur: 0.45 }
+        ];
+
+        notes.forEach(n => {
+          const osc = ctx.createOscillator();
+          const gain = ctx.createGain();
+          osc.type = 'triangle';
+          osc.frequency.setValueAtTime(n.f, ctx.currentTime + n.start);
+          gain.gain.setValueAtTime(0.25, ctx.currentTime + n.start);
+          gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + n.start + n.dur);
+          osc.connect(gain);
+          gain.connect(ctx.destination);
+          osc.start(ctx.currentTime + n.start);
+          osc.stop(ctx.currentTime + n.start + n.dur);
+        });
+      } catch (e) {}
+    }
+
+    function saveStats() {
+      const userKey = getUserStorageKey();
+      localStorage.setItem(`prodhub_stats_${userKey}`, JSON.stringify(userStats));
+    }
+
+    function openReflectionModal() {
+      document.getElementById('reflectionModalOverlay').classList.add('active');
+    }
+
+    function closeReflectionModal() {
+      document.getElementById('reflectionModalOverlay').classList.remove('active');
+    }
+
+    function goToJournalWithReflection() {
+      closeReflectionModal();
+      switchTab('journal');
+
+      initJournalDate();
+      const topicInput = document.getElementById('journalTopicInput');
+      const bodyInput = document.getElementById('journalBodyInput');
+      
+      const now = new Date();
+      const timeString = now.toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit' });
+      if (topicInput) topicInput.value = `Evaluasi Sesi Fokus (${timeString})`;
+      if (bodyInput) {
+        bodyInput.value = `Target yang berhasil dikerjakan:\n1. \n\nEvaluasi & poin pemahaman materi: `;
+        bodyInput.focus();
+      }
+
+      showToast('Tuangkan catatan refleksi belajarmu di sini ⚡');
+    }
+
+    function startBreakAfterReflection() {
+      closeReflectionModal();
+      setFocusMode('shortBreak', 5);
+      startTimer();
+      showToast('☕ Istirahat 5 menit dimulai!');
+    }
+
+    function stopAmbientSound() {
+      ambientNodes.forEach(node => {
+        try { node.stop(); } catch(e){}
+        try { node.disconnect(); } catch(e){}
+      });
+      ambientNodes = [];
+      currentAmbient = null;
+      document.querySelectorAll('.sound-btn').forEach(btn => btn.classList.remove('playing'));
+      document.getElementById('soundStatusBadge').textContent = 'Nonaktif';
+      document.getElementById('soundStatusBadge').className = 'badge badge-blue';
+    }
+
+    function toggleSound(soundType) {
+      const ctx = getAudioContext();
+      if (currentAmbient === soundType) {
+        stopAmbientSound();
+        showToast('Suara penenang dimatikan');
+        return;
+      }
+
+      stopAmbientSound();
+      currentAmbient = soundType;
+
+      const targetBtn = document.querySelector(`.sound-btn[data-sound="${soundType}"]`);
+      if (targetBtn) targetBtn.classList.add('playing');
+      const badge = document.getElementById('soundStatusBadge');
+      badge.textContent = 'Aktif 🔊';
+      badge.className = 'badge badge-blue';
+
+      try {
+        const bufferSize = ctx.sampleRate * 2;
+        const noiseBuffer = ctx.createBuffer(1, bufferSize, ctx.sampleRate);
+        const output = noiseBuffer.getChannelData(0);
+        for (let i = 0; i < bufferSize; i++) {
+          output[i] = Math.random() * 2 - 1;
+        }
+
+        const whiteNoise = ctx.createBufferSource();
+        whiteNoise.buffer = noiseBuffer;
+        whiteNoise.loop = true;
+
+        const filter = ctx.createBiquadFilter();
+        const gain = ctx.createGain();
+
+        if (soundType === 'rain') {
+          filter.type = 'lowpass';
+          filter.frequency.setValueAtTime(1000, ctx.currentTime);
+          gain.gain.setValueAtTime(0.12, ctx.currentTime);
+        } else if (soundType === 'white') {
+          filter.type = 'bandpass';
+          filter.frequency.setValueAtTime(800, ctx.currentTime);
+          filter.Q.setValueAtTime(1.0, ctx.currentTime);
+          gain.gain.setValueAtTime(0.08, ctx.currentTime);
+        } else if (soundType === 'waves') {
+          filter.type = 'lowpass';
+          filter.frequency.setValueAtTime(450, ctx.currentTime);
+          gain.gain.setValueAtTime(0.15, ctx.currentTime);
+
+          const lfo = ctx.createOscillator();
+          const lfoGain = ctx.createGain();
+          lfo.frequency.setValueAtTime(0.15, ctx.currentTime);
+          lfoGain.gain.setValueAtTime(0.08, ctx.currentTime);
+          lfo.connect(gain.gain);
+          lfo.start();
+          ambientNodes.push(lfo);
+        }
+
+        whiteNoise.connect(filter);
+        filter.connect(gain);
+        gain.connect(ctx.destination);
+
+        whiteNoise.start();
+        ambientNodes.push(whiteNoise);
+        showToast(`Suara penenang dimulai 🌊`);
+      } catch (e) {
+        console.error('Audio generation error:', e);
+      }
+    }
+
+    // ==========================================================================
+    // 7. TAB 3: JURNAL & REFLEKSI PEMAHAMAN MATERI
+    // ==========================================================================
+    function initJournalDate() {
+      const dateInput = document.getElementById('journalDateInput');
+      if (dateInput && !dateInput.value) {
+        const today = new Date();
+        const pad = (n) => String(n).padStart(2, '0');
+        dateInput.value = `${today.getFullYear()}-${pad(today.getMonth() + 1)}-${pad(today.getDate())}`;
+      }
+    }
+
+    function setupMoodSelection() {
+      const moodBtns = document.querySelectorAll('#moodPicker .mood-btn');
+      moodBtns.forEach(btn => {
+        btn.addEventListener('click', () => {
+          moodBtns.forEach(b => b.classList.remove('active'));
+          btn.classList.add('active');
+          selectedMood = {
+            emoji: btn.dataset.mood,
+            text: btn.dataset.text
+          };
+        });
+      });
+    }
+
+    function getSubjectBadgeClass(subject) {
+      switch (subject) {
+        case 'Matematika': return 'subj-math';
+        case 'Informatika': return 'subj-code';
+        case 'IPA': return 'subj-science';
+        case 'Bahasa Inggris': return 'subj-english';
+        case 'Bahasa Indonesia': return 'subj-indo';
+        case 'IPS': return 'subj-social';
+        case 'Seni & Desain': return 'subj-art';
+        default: return 'subj-general';
+      }
+    }
+
+    function getSubjectIcon(subject) {
+      switch (subject) {
+        case 'Matematika': return '📐';
+        case 'Informatika': return '💻';
+        case 'IPA': return '🔬';
+        case 'Bahasa Inggris': return '🌍';
+        case 'Bahasa Indonesia': return '📖';
+        case 'IPS': return '🏛️';
+        case 'Seni & Desain': return '🎨';
+        default: return '⚡';
+      }
+    }
+
+    function formatJournalDisplayDate(dateStr) {
+      if (!dateStr) return '';
+      try {
+        const parts = dateStr.split('-');
+        if (parts.length === 3) {
+          const d = new Date(parseInt(parts[0]), parseInt(parts[1]) - 1, parseInt(parts[2]));
+          if (!isNaN(d.getTime())) {
+            return d.toLocaleDateString('id-ID', { weekday: 'short', day: 'numeric', month: 'short', year: 'numeric' });
+          }
+        }
+        const d = new Date(dateStr);
+        if (!isNaN(d.getTime())) {
+          return d.toLocaleDateString('id-ID', { weekday: 'short', day: 'numeric', month: 'short', year: 'numeric' });
+        }
+        return dateStr;
+      } catch (e) {
+        return dateStr;
+      }
+    }
+
+    function saveJournalEntry() {
+      const dateInput = document.getElementById('journalDateInput');
+      const subjectInput = document.getElementById('journalSubjectInput');
+      const topicInput = document.getElementById('journalTopicInput');
+      const bodyInput = document.getElementById('journalBodyInput');
+
+      const dateVal = (dateInput && dateInput.value) ? dateInput.value : new Date().toISOString().split('T')[0];
+      const subjectVal = (subjectInput && subjectInput.value) ? subjectInput.value : 'Umum';
+      const topicVal = topicInput ? topicInput.value.trim() : '';
+      const bodyVal = bodyInput ? bodyInput.value.trim() : '';
+
+      if (!bodyVal && !topicVal) {
+        showToast('Isi topik atau catatan refleksimu dulu ya! ⚡');
+        if (topicInput && !topicVal) topicInput.focus();
+        else if (bodyInput) bodyInput.focus();
+        return;
+      }
+
+      const displayDate = formatJournalDisplayDate(dateVal);
+
+      const newEntry = {
+        id: Date.now(),
+        date: dateVal,
+        displayDate: displayDate,
+        subject: subjectVal,
+        topic: topicVal || `Catatan ${subjectVal}`,
+        body: bodyVal || '(Tidak ada catatan tambahan)',
+        mood: selectedMood.emoji || '🔥',
+        moodText: selectedMood.text || 'Paham',
+        createdAt: Date.now()
+      };
+
+      journals.unshift(newEntry);
+      saveJournals();
+      renderJournals();
+
+      if (topicInput) topicInput.value = '';
+      if (bodyInput) bodyInput.value = '';
+      playCoolClickSound();
+      showToast('Catatan refleksi berhasil disimpan! ⚡');
+    }
+
+    function deleteJournal(id) {
+      if (confirm('Hapus catatan refleksi ini dari riwayat?')) {
+        journals = journals.filter(j => j.id !== id);
+        saveJournals();
+        renderJournals();
+        playCoolClickSound();
+        showToast('Catatan refleksi telah dihapus ⚡');
+      }
+    }
+
+    function saveJournals() {
+      const userKey = getUserStorageKey();
+      localStorage.setItem(`prodhub_journals_${userKey}`, JSON.stringify(journals));
+    }
+
+    function renderJournals() {
+      const container = document.getElementById('journalListContainer');
+      const badge = document.getElementById('journalCountBadge');
+      if (badge) badge.textContent = `${journals.length} Catatan`;
+
+      if (!container) return;
+
+      if (journals.length === 0) {
+        container.innerHTML = `
+          <div class="empty-state">
+            <svg viewBox="0 0 24 24" fill="none" stroke-width="1.8">
+              <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path>
+              <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path>
+            </svg>
+            <p>Belum ada catatan refleksi. Tuangkan catatan belajarmu hari ini! ⚡</p>
+          </div>
+        `;
+        return;
+      }
+
+      // Sort newest first by id/createdAt
+      const sorted = [...journals].sort((a, b) => (b.createdAt || b.id) - (a.createdAt || a.id));
+
+      container.innerHTML = sorted.map(j => {
+        const subject = j.subject || 'Umum';
+        const badgeClass = getSubjectBadgeClass(subject);
+        const subjectIcon = getSubjectIcon(subject);
+        const topic = j.topic || j.title || `Refleksi ${subject}`;
+        const displayDate = j.displayDate || j.createdAt || 'Hari ini';
+        const moodEmoji = j.mood || '⚡';
+        const moodText = j.moodText || 'Refleksi';
+
+        return `
+          <div class="journal-card">
+            <div class="journal-card-header">
+              <div class="journal-meta-row">
+                <span class="journal-subject-badge ${badgeClass}">${subjectIcon} ${escapeHtml(subject)}</span>
+                <span class="badge badge-blue" style="font-size:0.68rem;padding:2px 7px;">📅 ${escapeHtml(displayDate)}</span>
+                <span class="badge badge-gold" style="font-size:0.68rem;padding:2px 7px;" title="${escapeHtml(moodText)}">${moodEmoji} ${escapeHtml(moodText)}</span>
+              </div>
+              <button class="btn-delete-task" onclick="deleteJournal(${j.id})" title="Hapus Catatan Refleksi">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <polyline points="3 6 5 6 21 6"></polyline>
+                  <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
+                </svg>
+              </button>
+            </div>
+            <div class="journal-title">${escapeHtml(topic)}</div>
+            <div class="journal-card-body">${escapeHtml(j.body)}</div>
+          </div>
+        `;
+      }).join('');
+    }
+
+    // ==========================================================================
+    // 8. HEADER QUICK STATS & UTILS
+    // ==========================================================================
+    function updateQuickStats() {
+      const completedCount = tasks.filter(t => t.completed).length;
+      document.getElementById('quickTaskStatus').textContent = `${completedCount} Selesai ⚡`;
+      document.getElementById('quickFocusCount').textContent = `${userStats.focusSessionsCompleted || 0}x`;
+    }
+
+    function escapeHtml(str) {
+      if (!str) return '';
+      return String(str)
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#039;');
+    }
+  </script>
+</body>
+</html>
